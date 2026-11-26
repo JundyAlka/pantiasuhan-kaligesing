@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="500" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#07291A"/>
+      <stop offset="55%" stop-color="#0F5132"/>
+      <stop offset="100%" stop-color="#166534"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <circle cx="690" cy="95" r="140" fill="#EAB308" fill-opacity="0.14"/>
+  <circle cx="110" cy="430" r="160" fill="#22C55E" fill-opacity="0.12"/>
+  
+          <path d="M0 330 Q220 280 440 325 T800 300 V500 H0 Z" fill="#166534"/>
+          <path d="M0 370 Q280 340 520 375 T800 355 V500 H0 Z" fill="#0F5132"/>
+          <circle cx="170" cy="245" r="56" fill="#22C55E" fill-opacity="0.85"/>
+          <rect x="162" y="285" width="16" height="65" rx="4" fill="#78350F"/>
+          <circle cx="620" cy="235" r="64" fill="#16A34A" fill-opacity="0.9"/>
+          <rect x="612" y="285" width="16" height="72" rx="4" fill="#78350F"/>
+          <rect x="290" y="200" width="220" height="145" rx="10" fill="#FFFFFF" fill-opacity="0.92"/>
+          <polygon points="270,206 400,145 530,206" fill="#07291A"/>
+        
+  <rect x="32" y="32" width="230" height="34" rx="17" fill="#07291A" fill-opacity="0.78" stroke="#EAB308" stroke-opacity="0.5"/>
+  <text x="48" y="54" fill="#FACC15" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">PROGRAM KEMANDIRIAN</text>
+  <rect x="0" y="408" width="800" height="92" fill="#07291A" fill-opacity="0.88"/>
+  <text x="36" y="446" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700">Pelatihan Keterampilan & Kemandirian</text>
+  <text x="36" y="474" fill="#D1FAE5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="500">Bekal Life Skills dan Kewirausahaan Anak Asuh</text>
+</svg>

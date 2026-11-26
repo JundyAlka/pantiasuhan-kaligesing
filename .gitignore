@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.pyo
+local-preview/messages.json
+.DS_Store
+Thumbs.db

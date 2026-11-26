@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="500" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#07291A"/>
+      <stop offset="55%" stop-color="#0F5132"/>
+      <stop offset="100%" stop-color="#1E7A45"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <circle cx="690" cy="95" r="140" fill="#EAB308" fill-opacity="0.14"/>
+  <circle cx="110" cy="430" r="160" fill="#22C55E" fill-opacity="0.12"/>
+  
+          <rect x="180" y="210" width="440" height="190" rx="12" fill="#FFFFFF" fill-opacity="0.95"/>
+          <path d="M270 210 C270 120 530 120 530 210 Z" fill="#0F5132"/>
+          <path d="M320 210 C320 145 480 145 480 210 Z" fill="#166534"/>
+          <circle cx="400" cy="108" r="14" fill="#EAB308"/>
+          <path d="M360 400 V290 C360 258 440 258 440 290 V400 Z" fill="#093622"/>
+          <path d="M225 320 V265 C225 245 275 245 275 265 V320 Z" fill="#DCFCE7"/>
+          <path d="M525 320 V265 C525 245 575 245 575 265 V320 Z" fill="#DCFCE7"/>
+        
+  <rect x="32" y="32" width="230" height="34" rx="17" fill="#07291A" fill-opacity="0.78" stroke="#EAB308" stroke-opacity="0.5"/>
+  <text x="48" y="54" fill="#FACC15" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">FASILITAS 04 • MUSHOLA PANTI</text>
+  <rect x="0" y="408" width="800" height="92" fill="#07291A" fill-opacity="0.88"/>
+  <text x="36" y="446" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700">Mushola Panti Asuhan</text>
+  <text x="36" y="474" fill="#D1FAE5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="500">Pusat Ibadah Berjamaah, Tahfidz & Kajian Islami</text>
+</svg>
