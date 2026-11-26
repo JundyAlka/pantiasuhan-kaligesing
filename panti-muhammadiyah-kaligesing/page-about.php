@@ -10,7 +10,7 @@
 get_header();
 
 $hero_about   = pmk_get_image_url( '', 'anak-kebersamaan-1.jpg' );
-$kepala_photo = pmk_get_image_url( 'pmk_img_kepala', 'photo-8.jpg' );
+$kepala_photo = pmk_get_image_url( 'pmk_img_kepala', 'kepala-panti.jpg' );
 $visi_bg      = pmk_get_image_url( '', 'anak-edukasi-mushola.jpg' );
 ?>
 

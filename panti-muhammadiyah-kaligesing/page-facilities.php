@@ -54,6 +54,14 @@ $facilities = array(
 
 $extra_docs = array(
 	array(
+		'title' => 'Kepala Panti Asuhan Muhammadiyah Kaligesing',
+		'img'   => pmk_get_image_url( '', 'kepala-panti.jpg' ),
+	),
+	array(
+		'title' => 'Penyerahan Bantuan Bakti Sosial bersama Mitra',
+		'img'   => pmk_get_image_url( '', 'bakti-sosial-kepala.jpg' ),
+	),
+	array(
 		'title' => 'Kebersamaan Anak Asuh & Pembina di Aula',
 		'img'   => pmk_get_image_url( '', 'anak-kebersamaan-1.jpg' ),
 	),

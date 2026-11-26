@@ -39,6 +39,7 @@ $anak_ceria_potret    = pmk_get_image_url( '', 'anak-ceria-potret.jpg' );
 $anak_edukasi_mushola = pmk_get_image_url( '', 'anak-edukasi-mushola.jpg' );
 $anak_kuis_mushola    = pmk_get_image_url( '', 'anak-kuis-mushola.jpg' );
 $anak_pembinaan_aula  = pmk_get_image_url( '', 'anak-pembinaan-aula.jpg' );
+$bakti_sosial_kepala  = pmk_get_image_url( '', 'bakti-sosial-kepala.jpg' );
 
 $hero_bg_slides = array(
 	array(
@@ -170,6 +171,10 @@ $orbit_pool = array(
 	array(
 		'img' => $photo_1,
 		'tag' => 'Bakti Sosial Panti',
+	),
+	array(
+		'img' => $bakti_sosial_kepala,
+		'tag' => 'Penyerahan Amanah Bakti Sosial',
 	),
 );
 ?>
