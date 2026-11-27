@@ -13,7 +13,26 @@
 (function () {
   'use strict';
 
-  // 0. Smooth Modern Page-Load & Refresh Entrance
+  // 0. Smooth Modern Page-Load & Refresh Entrance + Global Image Fallback Guard
+  function applyImageFallback(img) {
+    if (!img || img.tagName !== 'IMG' || img.dataset.fallbackApplied === '1') return;
+    var fallback = img.getAttribute('data-fallback-src') || (document.body && document.body.getAttribute('data-default-photo'));
+    if (fallback && img.src !== fallback) {
+      img.dataset.fallbackApplied = '1';
+      img.src = fallback;
+    }
+  }
+
+  window.addEventListener('error', function (e) {
+    applyImageFallback(e.target);
+  }, true);
+
+  document.querySelectorAll('img[data-fallback-src]').forEach(function (img) {
+    if (img.complete && img.naturalWidth === 0) {
+      applyImageFallback(img);
+    }
+  });
+
   var pageLoader = document.getElementById('pmk-page-loader');
   if (pageLoader) {
     function finishPageLoader() {

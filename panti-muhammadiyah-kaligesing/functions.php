@@ -9,18 +9,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PMK_THEME_VERSION', '2.1.0' );
+define( 'PMK_THEME_VERSION', '2.3.0' );
 
 require_once get_template_directory() . '/inc/customizer.php';
 require_once get_template_directory() . '/inc/contact-handler.php';
+require_once get_template_directory() . '/inc/page-builder.php';
 require_once get_template_directory() . '/inc/kp-sync.php';
 
 /**
- * Setup fitur inti tema WordPress, Elementor compatibility, dan lokasi menu.
+ * Setup fitur inti tema WordPress komersial, Elementor compatibility, dan lokasi menu.
  */
 function pmk_theme_setup() {
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'post-thumbnails' );
+	add_theme_support( 'customize-selective-refresh-widgets' );
+	add_theme_support( 'wp-block-styles' );
+	add_theme_support( 'editor-styles' );
 	add_theme_support(
 		'custom-logo',
 		array(

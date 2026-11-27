@@ -3,15 +3,15 @@ Theme Name: Panti Muhammadiyah Kaligesing
 Theme URI: https://pantimuhammadiyahkaligesing.my.id
 Author: Tim Kerja Praktek
 Author URI: https://pantimuhammadiyahkaligesing.my.id
-Description: Custom WordPress Theme Resmi Panti Asuhan Muhammadiyah Kaligesing (Kompatibel dengan Elementor & WPForms, Responsif Desktop & Mobile, Sinkron Laporan KP).
-Version: 2.0.0
+Description: Commercial-Grade Custom WordPress Theme Resmi Panti Asuhan Muhammadiyah Kaligesing. Dilengkapi Panel Customizer Lengkap (Warna, Layout, Teks, Foto, Struktur Organisasi, Rekening Donasi, Kontak WA), Kompatibel Penuh dengan Elementor Page Builder, Gutenberg Block Patterns, Shortcodes & WPForms.
+Version: 2.3.0
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: panti-muhammadiyah-kaligesing
-Tags: custom-menu, custom-logo, featured-images, full-width-template, sticky-post, accessibility-ready
+Tags: custom-colors, custom-menu, custom-logo, editor-style, featured-images, full-width-template, theme-options, accessibility-ready, block-patterns
 */
 
 /* Stylesheet utama dimuat dari assets/css/main.css melalui wp_enqueue_style() */

@@ -8,7 +8,19 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-$logo_url = pmk_get_logo_url();
+$logo_url         = pmk_get_logo_url();
+$default_logo_url = pmk_get_fallback_photo_url( 'logo-panti.png' );
+$footer_title     = pmk_get_mod( 'pmk_footer_title', 'Panti Asuhan Muhammadiyah Kaligesing' );
+$footer_tagline   = pmk_get_mod( 'pmk_footer_tagline', 'Terakreditasi Resmi • LKSA / MCC PCM Kaligesing' );
+$footer_desc      = pmk_get_mod(
+	'pmk_footer_desc',
+	'Lembaga kesejahteraan sosial anak yatim dan dhuafa di bawah naungan Pimpinan Cabang Muhammadiyah Kaligesing yang berkomitmen membentuk generasi Islami, berakhlak mulia, dan mandiri.'
+);
+$footer_copyright = pmk_get_mod(
+	'pmk_footer_copyright',
+	'Copyright © 2026 Panti Asuhan Muhammadiyah Kaligesing. Hak Cipta Dilindungi.'
+);
+$enable_float_wa  = pmk_get_bool_mod( 'pmk_enable_float_wa', true );
 ?>
 </main>
 
@@ -18,21 +30,37 @@ $logo_url = pmk_get_logo_url();
 			<div>
 				<div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
 					<span class="pmk-footer__logo-glass">
-						<img src="<?php echo esc_url( $logo_url ); ?>" alt="Logo Panti Asuhan Muhammadiyah Kaligesing" width="50" height="50">
+						<img src="<?php echo esc_url( $logo_url ); ?>" data-fallback-src="<?php echo esc_url( $default_logo_url ); ?>" alt="Logo Panti Asuhan Muhammadiyah Kaligesing" width="50" height="50">
 					</span>
 					<div>
-						<h2 class="pmk-footer__title" style="margin:0;font-size:1.15rem;">Panti Asuhan Muhammadiyah Kaligesing</h2>
-						<span style="font-size:0.84rem;color:#FACC15;font-weight:700;">Terakreditasi Resmi &bull; LKSA / MCC PCM Kaligesing</span>
+						<h2 class="pmk-footer__title" style="margin:0;font-size:1.15rem;"><?php echo esc_html( $footer_title ); ?></h2>
+						<span style="font-size:0.84rem;color:#FACC15;font-weight:700;"><?php echo esc_html( $footer_tagline ); ?></span>
 					</div>
 				</div>
 				<p class="pmk-footer__desc">
-					Lembaga kesejahteraan sosial anak yatim dan dhuafa di bawah naungan Pimpinan Cabang Muhammadiyah Kaligesing yang berkomitmen membentuk generasi Islami, berakhlak mulia, dan mandiri.
+					<?php echo esc_html( $footer_desc ); ?>
 				</p>
 			</div>
 
 			<div>
 				<h2 class="pmk-footer__title">Navigasi Halaman</h2>
-				<?php pmk_render_fallback_nav( 'pmk-footer__menu' ); ?>
+				<?php
+				if ( function_exists( 'has_nav_menu' ) && has_nav_menu( 'footer' ) && ! defined( 'PMK_LOCAL_PREVIEW' ) ) {
+					wp_nav_menu(
+						array(
+							'theme_location' => 'footer',
+							'container'      => false,
+							'menu_class'     => 'pmk-footer__menu',
+							'depth'          => 1,
+							'fallback_cb'    => function () {
+								pmk_render_fallback_nav( 'pmk-footer__menu' );
+							},
+						)
+					);
+				} else {
+					pmk_render_fallback_nav( 'pmk-footer__menu' );
+				}
+				?>
 			</div>
 
 			<div>
@@ -52,17 +80,25 @@ $logo_url = pmk_get_logo_url();
 			</div>
 		</div>
 
+		<?php if ( function_exists( 'is_active_sidebar' ) && is_active_sidebar( 'pmk-footer-widgets' ) ) : ?>
+			<div class="pmk-footer__widgets" style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.12);">
+				<?php dynamic_sidebar( 'pmk-footer-widgets' ); ?>
+			</div>
+		<?php endif; ?>
+
 		<div class="pmk-footer__bottom">
-			<span>Copyright &copy; 2026 Panti Asuhan Muhammadiyah Kaligesing. Hak Cipta Dilindungi.</span>
+			<span><?php echo esc_html( $footer_copyright ); ?></span>
 			<span>Desa Kaliharjo, Kec. Kaligesing, Kab. Purworejo, Jawa Tengah</span>
 		</div>
 	</div>
 </footer>
 
+<?php if ( $enable_float_wa ) : ?>
 <a class="pmk-float-wa" href="<?php echo esc_url( pmk_get_wa_url( 'Assalamualaikum, saya ingin informasi mengenai Panti Asuhan Muhammadiyah Kaligesing.' ) ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Chat WhatsApp Panti Asuhan Muhammadiyah Kaligesing">
 	<svg class="pmk-icon-pulse" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
 	<span>Chat WhatsApp</span>
 </a>
+<?php endif; ?>
 
 <?php wp_footer(); ?>
 </body>

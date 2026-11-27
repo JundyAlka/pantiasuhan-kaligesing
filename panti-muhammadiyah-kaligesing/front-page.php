@@ -2,12 +2,12 @@
 /**
  * Front Page Template (Halaman Beranda) — Panti Asuhan Muhammadiyah Kaligesing
  * Fitur:
- * - Hero Banner lebih tinggi & lebar dengan Background Slideshow (Plang Panti, Gedung, Anak Asuh, Kegiatan)
- * - 3 Kotak Foto Kolase dengan animasi bergulir halus (rolling reel) berurutan
- * - Bento Grid Informasi Kontak WA Tunggal, Alamat, Akreditasi & Hadis (tidak terpotong)
- * - Satu Section Panorama Terpadu: Tiga Pilar Layanan + Mengenal Panti Lebih Dekat + Animasi Hitung (24+, 15+, 18+, 5+)
- * - Ringkasan Kegiatan & Dokumentasi dengan Slideshow Foto Interaktif + Kartu Aktivitas di atas latar bersih
- * - Penyaluran Donasi Resmi dengan background foto kebersamaan anak asuh & Rekening BRI panti
+ * - Hero Banner dengan Background Slideshow & 3 Kotak Foto Kolase yang seluruhnya dapat dikustomisasi lewat Appearance -> Customize
+ * - Bento Grid Informasi Kontak WA Tunggal, Alamat, Akreditasi & Hadis
+ * - Satu Section Panorama Terpadu: Tiga Pilar Layanan + Mengenal Panti Lebih Dekat + Animasi Hitung Dinamis
+ * - Ringkasan Kegiatan & Dokumentasi dengan Slideshow Foto Interaktif + Kartu Aktivitas
+ * - Penyaluran Donasi Resmi dengan Rekening BRI panti
+ * - Integrasi penuh Elementor & Gutenberg Block Editor (Hybrid / Builder Only)
  *
  * @package Panti_Muhammadiyah_Kaligesing
  */
@@ -29,7 +29,7 @@ $photo_6     = pmk_get_image_url( '', 'photo-6.jpg' );
 $photo_8     = pmk_get_image_url( '', 'photo-8.jpg' );
 $photo_10    = pmk_get_image_url( '', 'photo-10.png' );
 $wa_foto_1   = pmk_get_image_url( '', 'wa-kegiatan-1.jpg' );
-$wa_land_2   = pmk_get_image_url( '', 'wa-landscape-2.jpg' );
+$wa_land_2   = pmk_get_image_url( 'pmk_img_unified_bg', 'wa-landscape-2.jpg' );
 $kaligrafi   = pmk_get_image_url( '', 'kaligrafi-muhammadiyah.jpg' );
 
 $anak_kebersamaan_1   = pmk_get_image_url( '', 'anak-kebersamaan-1.jpg' );
@@ -41,19 +41,83 @@ $anak_kuis_mushola    = pmk_get_image_url( '', 'anak-kuis-mushola.jpg' );
 $anak_pembinaan_aula  = pmk_get_image_url( '', 'anak-pembinaan-aula.jpg' );
 $bakti_sosial_kepala  = pmk_get_image_url( '', 'bakti-sosial-kepala.jpg' );
 
+// Foto Slide Hero Beranda (Mendukung Override dari Customizer)
+$hero_slide_1 = pmk_get_image_url( 'pmk_img_hero_slide_1', 'anak-ceria-landscape.jpg' );
+$hero_slide_2 = pmk_get_image_url( 'pmk_img_hero_slide_2', 'anak-edukasi-mushola.jpg' );
+$hero_slide_3 = pmk_get_image_url( 'pmk_img_hero_slide_3', 'anak-kebersamaan-1.jpg' );
+$hero_slide_5 = pmk_get_image_url( 'pmk_img_hero_slide_5', 'wa-landscape-2.jpg' );
+
+// Foto Kolase 3 Kotak Hero (Mendukung Override dari Customizer)
+$orbit_img_1 = pmk_get_image_url( 'pmk_img_orbit_1', 'anak-kebersamaan-1.jpg' );
+$orbit_img_2 = pmk_get_image_url( 'pmk_img_orbit_2', 'anak-edukasi-mushola.jpg' );
+$orbit_img_3 = pmk_get_image_url( 'pmk_img_orbit_3', 'anak-ceria-potret.jpg' );
+$donation_bg = pmk_get_image_url( 'pmk_img_donation_bg', 'anak-kebersamaan-1.jpg' );
+
+// Teks Hero & Beranda dari Customizer
+$hero_badge           = pmk_get_mod( 'pmk_hero_badge', 'Terakreditasi Resmi • Pimpinan Cabang Muhammadiyah Kaligesing' );
+$hero_title_prefix    = pmk_get_mod( 'pmk_hero_title_prefix', 'Selamat Datang di' );
+$hero_title_highlight = pmk_get_mod( 'pmk_hero_title_highlight', 'Panti Asuhan Muhammadiyah Kaligesing' );
+$hero_lead            = pmk_get_mod(
+	'pmk_hero_lead',
+	'Panti Asuhan Muhammadiyah Kaligesing berkomitmen memberikan pengasuhan terbaik, pembentukan karakter Islami, dan menjamin pendidikan anak-anak asuh demi masa depan yang lebih cerah.'
+);
+$hero_btn_primary   = pmk_get_mod( 'pmk_hero_btn_primary', 'Salurkan Donasi Sekarang' );
+$hero_btn_secondary = pmk_get_mod( 'pmk_hero_btn_secondary', 'Mengenal Panti Lebih Dekat' );
+
+$hadith_quote  = pmk_get_mod(
+	'pmk_hadith_quote',
+	'Sebaik-baik rumah di kalangan orang Islam adalah rumah yang di dalamnya terdapat anak yatim yang diperlakukan dengan baik. Dan seburuk-buruk rumah di kalangan orang Islam adalah rumah yang di dalamnya terdapat anak yatim yang diperlakukan dengan buruk.'
+);
+$hadith_source = pmk_get_mod( 'pmk_hadith_source', 'HR. Ibnu Majah • Landasan Pengasuhan Penuh Kasih Sayang' );
+
+// Visibilitas Seksi Beranda
+$show_bento      = pmk_get_bool_mod( 'pmk_show_home_bento', true );
+$show_pillars    = pmk_get_bool_mod( 'pmk_show_home_pillars', true );
+$show_stats      = pmk_get_bool_mod( 'pmk_show_home_stats', true );
+$show_activities = pmk_get_bool_mod( 'pmk_show_home_activities', true );
+$show_donation   = pmk_get_bool_mod( 'pmk_show_home_donation', true );
+
+// Statistik Beranda dari Customizer
+$home_counters = array(
+	array(
+		'val'   => pmk_get_int_mod( 'pmk_stat_1_val', 24, 0, 99999 ),
+		'label' => pmk_get_mod( 'pmk_stat_1_label', 'Anak Asuh' ),
+		'sub'   => pmk_get_mod( 'pmk_stat_1_sub', 'Tinggal & dibina penuh di asrama panti' ),
+		'icon'  => '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+	),
+	array(
+		'val'   => pmk_get_int_mod( 'pmk_stat_2_val', 15, 0, 99999 ),
+		'label' => pmk_get_mod( 'pmk_stat_2_label', 'Anak Binaan' ),
+		'sub'   => pmk_get_mod( 'pmk_stat_2_sub', 'Pendampingan santri luar asrama' ),
+		'icon'  => '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
+	),
+	array(
+		'val'   => pmk_get_int_mod( 'pmk_stat_3_val', 18, 0, 99999 ),
+		'label' => pmk_get_mod( 'pmk_stat_3_label', 'Alumni Terbina' ),
+		'sub'   => pmk_get_mod( 'pmk_stat_3_sub', 'Telah mandiri & berkarya di masyarakat' ),
+		'icon'  => '<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2.5 9 2.5 12 0v-5"/>',
+	),
+	array(
+		'val'   => pmk_get_int_mod( 'pmk_stat_4_val', 5, 0, 99999 ),
+		'label' => pmk_get_mod( 'pmk_stat_4_label', 'Tahun Mengabdi' ),
+		'sub'   => pmk_get_mod( 'pmk_stat_4_sub', 'Konsisten melayani umat & anak yatim' ),
+		'icon'  => '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+	),
+);
+
 $hero_bg_slides = array(
 	array(
-		'img'   => $anak_ceria_landscape,
+		'img'   => $hero_slide_1,
 		'label' => '01 Kebersamaan Anak Asuh',
 		'pos'   => 'center 42%',
 	),
 	array(
-		'img'   => $anak_edukasi_mushola,
+		'img'   => $hero_slide_2,
 		'label' => '02 Edukasi & Mushola',
 		'pos'   => 'center 45%',
 	),
 	array(
-		'img'   => $anak_kebersamaan_1,
+		'img'   => $hero_slide_3,
 		'label' => '03 Keluarga Besar Santri',
 		'pos'   => 'center 42%',
 	),
@@ -63,7 +127,7 @@ $hero_bg_slides = array(
 		'pos'   => '62% 48%',
 	),
 	array(
-		'img'   => $wa_land_2,
+		'img'   => $hero_slide_5,
 		'label' => '05 Gedung Panti',
 		'pos'   => 'center 50%',
 	),
@@ -119,17 +183,18 @@ $slides = array(
 		'caption' => 'Berlokasi strategis di Jl. Raya Purworejo–Kaligesing KM 8,5 Dusun Krajan, Desa Kaliharjo.',
 	),
 );
+
 $orbit_pool = array(
 	array(
-		'img' => $anak_kebersamaan_1,
+		'img' => $orbit_img_1,
 		'tag' => 'Kebersamaan Anak Asuh & Pembina',
 	),
 	array(
-		'img' => $anak_edukasi_mushola,
+		'img' => $orbit_img_2,
 		'tag' => 'Edukasi & Motivasi di Mushola',
 	),
 	array(
-		'img' => $anak_ceria_potret,
+		'img' => $orbit_img_3,
 		'tag' => 'Keceriaan Santri Putri',
 	),
 	array(
@@ -177,6 +242,8 @@ $orbit_pool = array(
 		'tag' => 'Penyerahan Amanah Bakti Sosial',
 	),
 );
+
+if ( ! pmk_should_hide_theme_sections() ) :
 ?>
 
 <!-- 1. HERO BANNER LEBIH LEBAR & TURUN + BACKGROUND SLIDESHOW + 3 KOTAK BERPUTAR -->
@@ -195,14 +262,14 @@ $orbit_pool = array(
 	<div class="pmk-container pmk-container--wide pmk-hero__grid">
 		<div class="pmk-hero__head pmk-reveal is-visible">
 			<span class="pmk-hero__badge">
-				<img src="<?php echo esc_url( $logo_url ); ?>" alt="" width="24" height="24" aria-hidden="true">
-				<span>Terakreditasi Resmi &bull; Pimpinan Cabang Muhammadiyah Kaligesing</span>
+				<img src="<?php echo esc_url( $logo_url ); ?>" data-fallback-src="<?php echo esc_url( pmk_get_fallback_photo_url( 'logo-panti.png' ) ); ?>" alt="" width="24" height="24" aria-hidden="true">
+				<span><?php echo esc_html( $hero_badge ); ?></span>
 			</span>
 			<h1 class="pmk-hero__title">
-				Selamat Datang di <span>Panti Asuhan Muhammadiyah Kaligesing</span>
+				<?php echo esc_html( $hero_title_prefix ); ?> <span><?php echo esc_html( $hero_title_highlight ); ?></span>
 			</h1>
 			<p class="pmk-hero__lead">
-				Panti Asuhan Muhammadiyah Kaligesing berkomitmen memberikan pengasuhan terbaik, pembentukan karakter Islami, dan menjamin pendidikan anak-anak asuh demi masa depan yang lebih cerah.
+				<?php echo esc_html( $hero_lead ); ?>
 			</p>
 		</div>
 
@@ -214,22 +281,22 @@ $orbit_pool = array(
 			</div>
 			<div class="pmk-hero__collage" id="pmk-orbit-stage">
 				<button type="button" class="pmk-orbit-card" data-slot="main" data-photo-index="0" aria-label="Foto utama panti">
-					<img class="pmk-orbit-card__img is-current" src="<?php echo esc_url( $orbit_pool[0]['img'] ); ?>" alt="<?php echo esc_attr( $orbit_pool[0]['tag'] ); ?>">
-					<img class="pmk-orbit-card__img is-next" src="<?php echo esc_url( $orbit_pool[0]['img'] ); ?>" alt="">
+					<img class="pmk-orbit-card__img is-current" src="<?php echo esc_url( $orbit_pool[0]['img'] ); ?>" data-fallback-src="<?php echo esc_url( $anak_kebersamaan_1 ); ?>" alt="<?php echo esc_attr( $orbit_pool[0]['tag'] ); ?>">
+					<img class="pmk-orbit-card__img is-next" src="<?php echo esc_url( $orbit_pool[0]['img'] ); ?>" data-fallback-src="<?php echo esc_url( $anak_kebersamaan_1 ); ?>" alt="">
 					<span class="pmk-orbit-card__tag"><?php echo esc_html( $orbit_pool[0]['tag'] ); ?></span>
 					<span class="pmk-orbit-card__live" aria-hidden="true"></span>
 				</button>
 
 				<button type="button" class="pmk-orbit-card" data-slot="top" data-photo-index="1" aria-label="Foto kegiatan atas">
-					<img class="pmk-orbit-card__img is-current" src="<?php echo esc_url( $orbit_pool[1]['img'] ); ?>" alt="<?php echo esc_attr( $orbit_pool[1]['tag'] ); ?>">
-					<img class="pmk-orbit-card__img is-next" src="<?php echo esc_url( $orbit_pool[1]['img'] ); ?>" alt="">
+					<img class="pmk-orbit-card__img is-current" src="<?php echo esc_url( $orbit_pool[1]['img'] ); ?>" data-fallback-src="<?php echo esc_url( $anak_edukasi_mushola ); ?>" alt="<?php echo esc_attr( $orbit_pool[1]['tag'] ); ?>">
+					<img class="pmk-orbit-card__img is-next" src="<?php echo esc_url( $orbit_pool[1]['img'] ); ?>" data-fallback-src="<?php echo esc_url( $anak_edukasi_mushola ); ?>" alt="">
 					<span class="pmk-orbit-card__tag"><?php echo esc_html( $orbit_pool[1]['tag'] ); ?></span>
 					<span class="pmk-orbit-card__live" aria-hidden="true"></span>
 				</button>
 
 				<button type="button" class="pmk-orbit-card" data-slot="bottom" data-photo-index="2" aria-label="Foto kegiatan slideshow bawah">
-					<img class="pmk-orbit-card__img is-current" src="<?php echo esc_url( $orbit_pool[2]['img'] ); ?>" alt="<?php echo esc_attr( $orbit_pool[2]['tag'] ); ?>">
-					<img class="pmk-orbit-card__img is-next" src="<?php echo esc_url( $orbit_pool[2]['img'] ); ?>" alt="">
+					<img class="pmk-orbit-card__img is-current" src="<?php echo esc_url( $orbit_pool[2]['img'] ); ?>" data-fallback-src="<?php echo esc_url( $anak_ceria_potret ); ?>" alt="<?php echo esc_attr( $orbit_pool[2]['tag'] ); ?>">
+					<img class="pmk-orbit-card__img is-next" src="<?php echo esc_url( $orbit_pool[2]['img'] ); ?>" data-fallback-src="<?php echo esc_url( $anak_ceria_potret ); ?>" alt="">
 					<span class="pmk-orbit-card__tag"><?php echo esc_html( $orbit_pool[2]['tag'] ); ?></span>
 					<span class="pmk-orbit-card__live" aria-hidden="true"></span>
 				</button>
@@ -241,10 +308,10 @@ $orbit_pool = array(
 			<div class="pmk-hero__actions">
 				<a class="pmk-btn pmk-btn--gold pmk-btn--sheen pmk-btn--glow" href="#donasi-home">
 					<svg class="pmk-icon-pulse" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-					<span>Salurkan Donasi Sekarang</span>
+					<span><?php echo esc_html( $hero_btn_primary ); ?></span>
 				</a>
 				<a class="pmk-btn pmk-btn--ghost-light" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">
-					<span>Mengenal Panti Lebih Dekat</span>
+					<span><?php echo esc_html( $hero_btn_secondary ); ?></span>
 				</a>
 			</div>
 			<div class="pmk-hero__meta">
@@ -286,6 +353,7 @@ $orbit_pool = array(
 	</div>
 </section>
 
+<?php if ( $show_bento ) : ?>
 <!-- 2. BENTO GRID: KONTAK WA, ALAMAT, AKREDITASI & HADIS -->
 <section class="pmk-section pmk-bento">
 	<div class="pmk-container pmk-container--wide">
@@ -335,24 +403,27 @@ $orbit_pool = array(
 			<article class="pmk-bento__card pmk-bento__card--hadith pmk-reveal" style="--delay: 220ms; background-image: linear-gradient(125deg, rgba(7, 41, 26, 0.92), rgba(15, 81, 50, 0.88)), url('<?php echo esc_url( $kaligrafi ); ?>'); background-size: cover; background-position: center;">
 				<div class="pmk-hadith__layout">
 					<div class="pmk-hadith__emblem">
-						<img src="<?php echo esc_url( $logo_url ); ?>" alt="Lambang Muhammadiyah" width="64" height="64">
+						<img src="<?php echo esc_url( $logo_url ); ?>" data-fallback-src="<?php echo esc_url( pmk_get_fallback_photo_url( 'logo-panti.png' ) ); ?>" alt="Lambang Muhammadiyah" width="64" height="64">
 					</div>
 					<div>
 						<blockquote class="pmk-hadith__quote">
-							&ldquo;Sebaik-baik rumah di kalangan orang Islam adalah rumah yang di dalamnya terdapat anak yatim yang diperlakukan dengan baik. Dan seburuk-buruk rumah di kalangan orang Islam adalah rumah yang di dalamnya terdapat anak yatim yang diperlakukan dengan buruk.&rdquo;
+							&ldquo;<?php echo esc_html( $hadith_quote ); ?>&rdquo;
 						</blockquote>
-						<p class="pmk-hadith__source">HR. Ibnu Majah &bull; Landasan Pengasuhan Penuh Kasih Sayang</p>
+						<p class="pmk-hadith__source"><?php echo esc_html( $hadith_source ); ?></p>
 					</div>
 				</div>
 			</article>
 		</div>
 	</div>
 </section>
+<?php endif; ?>
 
+<?php if ( $show_pillars || $show_stats ) : ?>
 <!-- 3. SATU SECTION PANORAMA TERPADU: TIGA PILAR LAYANAN + MENGENAL PANTI LEBIH DEKAT + ANIMASI HITUNG -->
 <section class="pmk-unified-showcase" style="background-image: url('<?php echo esc_url( $wa_land_2 ); ?>');">
 	<div class="pmk-unified-showcase__scrim" aria-hidden="true"></div>
 	<div class="pmk-container pmk-container--wide" style="position:relative;z-index:2;">
+		<?php if ( $show_pillars ) : ?>
 		<div class="pmk-section-head pmk-section-head--center pmk-reveal">
 			<span class="pmk-eyebrow pmk-eyebrow--light">Khidmat Sosial &amp; Komitmen Pengasuhan</span>
 			<h2 class="pmk-section-title" style="color:#FFFFFF;">Tiga Pilar Layanan &amp; Amanah Panti</h2>
@@ -444,7 +515,7 @@ $orbit_pool = array(
 		<div class="pmk-cards-3">
 			<article class="pmk-pillar-card pmk-pillar-card--photo pmk-reveal">
 				<div class="pmk-pillar-card__media">
-					<img src="<?php echo esc_url( $anak_edukasi_mushola ); ?>" alt="Membentuk Generasi Islami yang Mandiri">
+					<img src="<?php echo esc_url( $anak_edukasi_mushola ); ?>" data-fallback-src="<?php echo esc_url( pmk_get_fallback_photo_url( 'anak-edukasi-mushola.jpg' ) ); ?>" alt="Membentuk Generasi Islami yang Mandiri">
 					<span class="pmk-pillar-card__num">01 &bull; Fasilitas &amp; Karakter</span>
 				</div>
 				<div class="pmk-pillar-card__body">
@@ -465,7 +536,7 @@ $orbit_pool = array(
 
 			<article class="pmk-pillar-card pmk-pillar-card--photo pmk-reveal" style="--delay: 100ms;">
 				<div class="pmk-pillar-card__media">
-					<img src="<?php echo esc_url( $anak_ceria_landscape ); ?>" alt="Menjamin Masa Depan Anak Asuh">
+					<img src="<?php echo esc_url( $anak_ceria_landscape ); ?>" data-fallback-src="<?php echo esc_url( pmk_get_fallback_photo_url( 'anak-ceria-landscape.jpg' ) ); ?>" alt="Menjamin Masa Depan Anak Asuh">
 					<span class="pmk-pillar-card__num">02 &bull; Misi &amp; Fokus Kami</span>
 				</div>
 				<div class="pmk-pillar-card__body">
@@ -486,7 +557,7 @@ $orbit_pool = array(
 
 			<article class="pmk-pillar-card pmk-pillar-card--photo pmk-reveal" style="--delay: 200ms;">
 				<div class="pmk-pillar-card__media">
-					<img src="<?php echo esc_url( $photo_1 ); ?>" alt="Menyalurkan Amanah Bersama Donatur">
+					<img src="<?php echo esc_url( $photo_1 ); ?>" data-fallback-src="<?php echo esc_url( pmk_get_fallback_photo_url( 'photo-1.jpg' ) ); ?>" alt="Menyalurkan Amanah Bersama Donatur">
 					<span class="pmk-pillar-card__num">03 &bull; Transparansi &amp; Donasi</span>
 				</div>
 				<div class="pmk-pillar-card__body">
@@ -505,7 +576,9 @@ $orbit_pool = array(
 				</div>
 			</article>
 		</div>
+		<?php endif; ?>
 
+		<?php if ( $show_stats ) : ?>
 		<!-- MENGENAL PANTI LEBIH DEKAT + ANIMASI HITUNG DI DALAM SATU BACKGROUND TERPADU -->
 		<div class="pmk-unified-stats">
 			<div class="pmk-section-head pmk-section-head--center pmk-reveal" style="margin-bottom:32px;">
@@ -517,50 +590,25 @@ $orbit_pool = array(
 			</div>
 
 			<div class="pmk-counter-grid pmk-counter-grid--unified pmk-reveal">
-				<article class="pmk-counter-card">
-					<div class="pmk-counter-card__icon pmk-icon-anim">
-						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-					</div>
-					<div class="pmk-counter-card__val" data-counter-target="24" data-counter-suffix="+">0+</div>
-					<div class="pmk-counter-card__bar"></div>
-					<div class="pmk-counter-card__label">Anak Asuh</div>
-					<p class="pmk-counter-card__sub">Tinggal &amp; dibina penuh di asrama panti</p>
-				</article>
-
-				<article class="pmk-counter-card">
-					<div class="pmk-counter-card__icon pmk-icon-anim">
-						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-					</div>
-					<div class="pmk-counter-card__val" data-counter-target="15" data-counter-suffix="+">0+</div>
-					<div class="pmk-counter-card__bar"></div>
-					<div class="pmk-counter-card__label">Anak Binaan</div>
-					<p class="pmk-counter-card__sub">Pendampingan santri luar asrama</p>
-				</article>
-
-				<article class="pmk-counter-card">
-					<div class="pmk-counter-card__icon pmk-icon-anim">
-						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2.5 9 2.5 12 0v-5"/></svg>
-					</div>
-					<div class="pmk-counter-card__val" data-counter-target="18" data-counter-suffix="+">0+</div>
-					<div class="pmk-counter-card__bar"></div>
-					<div class="pmk-counter-card__label">Alumni Terbina</div>
-					<p class="pmk-counter-card__sub">Telah mandiri &amp; berkarya di masyarakat</p>
-				</article>
-
-				<article class="pmk-counter-card">
-					<div class="pmk-counter-card__icon pmk-icon-anim">
-						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-					</div>
-					<div class="pmk-counter-card__val" data-counter-target="5" data-counter-suffix="+">0+</div>
-					<div class="pmk-counter-card__bar"></div>
-					<div class="pmk-counter-card__label">Tahun Mengabdi</div>
-					<p class="pmk-counter-card__sub">Konsisten melayani umat &amp; anak yatim</p>
-				</article>
+				<?php foreach ( $home_counters as $hc ) : ?>
+					<article class="pmk-counter-card">
+						<div class="pmk-counter-card__icon pmk-icon-anim">
+							<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><?php echo $hc['icon']; ?></svg>
+						</div>
+						<div class="pmk-counter-card__val" data-counter-target="<?php echo esc_attr( $hc['val'] ); ?>" data-counter-suffix="+">0+</div>
+						<div class="pmk-counter-card__bar"></div>
+						<div class="pmk-counter-card__label"><?php echo esc_html( $hc['label'] ); ?></div>
+						<p class="pmk-counter-card__sub"><?php echo esc_html( $hc['sub'] ); ?></p>
+					</article>
+				<?php endforeach; ?>
 			</div>
 		</div>
+		<?php endif; ?>
 	</div>
 </section>
+<?php endif; ?>
 
+<?php if ( $show_activities ) : ?>
 <!-- 4. RINGKASAN KEGIATAN & DOKUMENTASI (LATAR BERSIH + SLIDESHOW INTERAKTIF + KARTU AKTIVITAS) -->
 <section class="pmk-section pmk-section--tint">
 	<div class="pmk-container pmk-container--wide">
@@ -578,7 +626,7 @@ $orbit_pool = array(
 				<div class="pmk-slideshow__viewport">
 					<?php foreach ( $slides as $idx => $slide ) : ?>
 						<figure class="pmk-slide <?php echo 0 === $idx ? 'is-active' : ''; ?>" data-slide-index="<?php echo esc_attr( $idx ); ?>">
-							<img src="<?php echo esc_url( $slide['img'] ); ?>" alt="<?php echo esc_attr( $slide['title'] ); ?>">
+							<img src="<?php echo esc_url( $slide['img'] ); ?>" data-fallback-src="<?php echo esc_url( pmk_get_fallback_photo_url( 'panti-1.jpg' ) ); ?>" alt="<?php echo esc_attr( $slide['title'] ); ?>">
 							<figcaption class="pmk-slide__caption">
 								<span class="pmk-slide__tag"><?php echo esc_html( $slide['tag'] ); ?></span>
 								<h3 class="pmk-slide__title"><?php echo esc_html( $slide['title'] ); ?></h3>
@@ -608,7 +656,7 @@ $orbit_pool = array(
 			<div class="pmk-activity-stack pmk-reveal" style="--delay: 120ms;">
 				<article class="pmk-activity-card pmk-activity-card--interactive" data-slide-jump="0">
 					<div class="pmk-activity-card__media">
-						<img src="<?php echo esc_url( $anak_kebersamaan_1 ); ?>" alt="Kebersamaan Ceria Anak Asuh Panti">
+						<img src="<?php echo esc_url( $anak_kebersamaan_1 ); ?>" data-fallback-src="<?php echo esc_url( pmk_get_fallback_photo_url( 'anak-kebersamaan-1.jpg' ) ); ?>" alt="Kebersamaan Ceria Anak Asuh Panti">
 					</div>
 					<div class="pmk-activity-card__body">
 						<div class="pmk-activity-card__meta">
@@ -622,7 +670,7 @@ $orbit_pool = array(
 
 				<article class="pmk-activity-card pmk-activity-card--interactive" data-slide-jump="1">
 					<div class="pmk-activity-card__media">
-						<img src="<?php echo esc_url( $anak_edukasi_mushola ); ?>" alt="Pembinaan dan Motivasi di Mushola Panti">
+						<img src="<?php echo esc_url( $anak_edukasi_mushola ); ?>" data-fallback-src="<?php echo esc_url( pmk_get_fallback_photo_url( 'anak-edukasi-mushola.jpg' ) ); ?>" alt="Pembinaan dan Motivasi di Mushola Panti">
 					</div>
 					<div class="pmk-activity-card__body">
 						<div class="pmk-activity-card__meta">
@@ -636,7 +684,7 @@ $orbit_pool = array(
 
 				<article class="pmk-activity-card pmk-activity-card--interactive" data-slide-jump="2">
 					<div class="pmk-activity-card__media">
-						<img src="<?php echo esc_url( $panti_4 ); ?>" alt="Pendampingan Belajar dan IT Santri">
+						<img src="<?php echo esc_url( $panti_4 ); ?>" data-fallback-src="<?php echo esc_url( pmk_get_fallback_photo_url( 'panti-4.jpg' ) ); ?>" alt="Pendampingan Belajar dan IT Santri">
 					</div>
 					<div class="pmk-activity-card__body">
 						<div class="pmk-activity-card__meta">
@@ -650,7 +698,7 @@ $orbit_pool = array(
 
 				<article class="pmk-activity-card pmk-activity-card--interactive" data-slide-jump="4">
 					<div class="pmk-activity-card__media">
-						<img src="<?php echo esc_url( $photo_1 ); ?>" alt="Bakti Sosial dan Kunjungan Tamu">
+						<img src="<?php echo esc_url( $photo_1 ); ?>" data-fallback-src="<?php echo esc_url( pmk_get_fallback_photo_url( 'photo-1.jpg' ) ); ?>" alt="Bakti Sosial dan Kunjungan Tamu">
 					</div>
 					<div class="pmk-activity-card__body">
 						<div class="pmk-activity-card__meta">
@@ -671,17 +719,19 @@ $orbit_pool = array(
 		</div>
 	</div>
 </section>
+<?php endif; ?>
 
+<?php if ( $show_donation ) : ?>
 <!-- 5. SECTION INFO REKENING DONASI DENGAN BACKGROUND FOTO BERSAMA ANAK ASUH -->
-<section id="donasi-home" class="pmk-section pmk-photo-band pmk-photo-band--donation" style="background-image: url('<?php echo esc_url( $anak_kebersamaan_1 ); ?>'); background-position: center 55%;">
+<section id="donasi-home" class="pmk-section pmk-photo-band pmk-photo-band--donation" style="background-image: url('<?php echo esc_url( $donation_bg ); ?>'); background-position: center 55%;">
 	<div class="pmk-photo-band__scrim pmk-photo-band__scrim--warm" aria-hidden="true"></div>
 	<div class="pmk-container pmk-container--wide" style="position:relative;z-index:2;">
 		<div class="pmk-donation-box pmk-reveal">
 			<div>
 				<span class="pmk-eyebrow pmk-eyebrow--light">Penyaluran Donasi Resmi</span>
-				<h2 class="pmk-donation-box__title">Mari Berbagi Kebaikan untuk Masa Depan Anak Yatim &amp; Dhuafa</h2>
+				<h2 class="pmk-donation-box__title"><?php echo esc_html( $bank['title'] ); ?></h2>
 				<p class="pmk-donation-box__desc">
-					Dukungan zakat, infaq, sedekah, maupun wakaf dari Bapak/Ibu sangat berarti bagi biaya pendidikan, konsumsi bergizi, dan kebutuhan asrama anak-anak asuh kami.
+					<?php echo esc_html( $bank['desc'] ); ?>
 				</p>
 				<div class="pmk-donation-box__actions">
 					<a class="pmk-btn pmk-btn--gold pmk-btn--sheen pmk-btn--glow" href="<?php echo esc_url( $wa_url ); ?>" target="_blank" rel="noopener noreferrer">
@@ -710,6 +760,12 @@ $orbit_pool = array(
 		</div>
 	</div>
 </section>
+<?php endif; ?>
 
 <?php
+endif; // End ! pmk_should_hide_theme_sections()
+
+// Area Dropzone Elementor & Gutenberg Block Editor
+pmk_render_builder_content( 'home' );
+
 get_footer();

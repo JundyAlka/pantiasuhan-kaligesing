@@ -2,12 +2,13 @@
 /**
  * Template Name: Halaman Contact (Kontak & Donasi)
  * Memuat:
- * - Hero Banner dengan foto landscape asli
- * - Formulir Kontak Standar (Nama, Email, Subjek, Pesan, Submit) sesuai Flowchart Gambar 3.2 & Tabel 4.1
+ * - Hero Banner dengan foto landscape asli (dapat diganti via Customizer)
+ * - Formulir Kontak Standar (Nama, Email, Subjek, Pesan, Submit) atau Shortcode WPForms / Contact Form 7 / FluentForms
  * - Validasi kolom wajib + penyimpanan ke database WordPress
  * - Tombol Chat WhatsApp (Nomor Tunggal)
- * - Alamat Lengkap & Embed Google Maps
+ * - Alamat Lengkap & Embed Google Maps (dapat dikustomisasi)
  * - Info Rekening Donasi Resmi (Bank BRI 684301006299530 a.n. PAY DAN DM KALIGESING)
+ * - Kompatibel penuh dengan Elementor & Gutenberg Block Editor
  *
  * @package Panti_Muhammadiyah_Kaligesing
  */
@@ -16,13 +17,25 @@ $submission = pmk_process_contact_submission();
 
 get_header();
 
-$hero_contact = pmk_get_image_url( '', 'photo-10.png' );
-$bank         = pmk_get_donation_info();
-$wa_display   = pmk_get_wa_display();
-$wa_url       = pmk_get_wa_url( 'Assalamualaikum, saya ingin menghubungi Panti Asuhan Muhammadiyah Kaligesing.' );
-$address      = pmk_get_address();
-$wpforms_id   = absint( get_theme_mod( 'pmk_wpforms_id', 0 ) );
-$use_wpforms  = ( $wpforms_id > 0 && function_exists( 'shortcode_exists' ) && shortcode_exists( 'wpforms' ) );
+$hero_contact       = pmk_get_image_url( 'pmk_img_hero_contact', 'photo-10.png' );
+$contact_hero_title = pmk_get_mod( 'pmk_contact_hero_title', 'Kontak & Saluran Donasi Resmi' );
+$contact_hero_desc  = pmk_get_mod(
+	'pmk_contact_hero_desc',
+	'Panti Asuhan Muhammadiyah Kaligesing siap menerima silaturahmi, kunjungan, maupun penyaluran donasi dari Anda demi masa depan santri yang lebih baik.'
+);
+
+$bank          = pmk_get_donation_info();
+$wa_display    = pmk_get_wa_display();
+$wa_url        = pmk_get_wa_url( 'Assalamualaikum, saya ingin menghubungi Panti Asuhan Muhammadiyah Kaligesing.' );
+$address       = pmk_get_address();
+$maps_link     = pmk_get_mod( 'pmk_maps_link', 'https://maps.google.com/?q=Panti+Asuhan+Muhammadiyah+Kaligesing+Purworejo' );
+$maps_embed    = pmk_get_mod( 'pmk_maps_embed', 'https://maps.google.com/maps?q=Panti%20Asuhan%20Muhammadiyah%20Kaligesing%20Kaliharjo%20Purworejo&t=&z=15&ie=UTF8&iwloc=&output=embed' );
+$custom_sc     = pmk_get_mod( 'pmk_custom_form_shortcode', '' );
+$wpforms_id    = absint( get_theme_mod( 'pmk_wpforms_id', 0 ) );
+$use_custom_sc = ( '' !== $custom_sc && function_exists( 'do_shortcode' ) );
+$use_wpforms   = ( ! $use_custom_sc && $wpforms_id > 0 && function_exists( 'shortcode_exists' ) && shortcode_exists( 'wpforms' ) );
+
+if ( ! pmk_should_hide_theme_sections() ) :
 ?>
 
 <section class="pmk-page-hero pmk-page-hero--photo" style="background-image: url('<?php echo esc_url( $hero_contact ); ?>');">
@@ -33,9 +46,9 @@ $use_wpforms  = ( $wpforms_id > 0 && function_exists( 'shortcode_exists' ) && sh
 			<span aria-hidden="true">/</span>
 			<span>Kontak</span>
 		</nav>
-		<h1 class="pmk-page-hero__title">Kontak &amp; Saluran Donasi Resmi</h1>
+		<h1 class="pmk-page-hero__title"><?php echo esc_html( $contact_hero_title ); ?></h1>
 		<p class="pmk-page-hero__desc">
-			Panti Asuhan Muhammadiyah Kaligesing siap menerima silaturahmi, kunjungan, maupun penyaluran donasi dari Anda demi masa depan santri yang lebih baik.
+			<?php echo esc_html( $contact_hero_desc ); ?>
 		</p>
 	</div>
 </section>
@@ -51,7 +64,11 @@ $use_wpforms  = ( $wpforms_id > 0 && function_exists( 'shortcode_exists' ) && sh
 					Kolom bertanda bintang (<span class="pmk-form-req">*</span>) wajib diisi. Setiap pesan yang valid akan langsung tersimpan aman ke dalam database WordPress.
 				</p>
 
-				<?php if ( $use_wpforms ) : ?>
+				<?php if ( $use_custom_sc ) : ?>
+					<div class="wpforms-container">
+						<?php echo do_shortcode( $custom_sc ); ?>
+					</div>
+				<?php elseif ( $use_wpforms ) : ?>
 					<div class="wpforms-container">
 						<?php echo do_shortcode( '[wpforms id="' . $wpforms_id . '"]' ); ?>
 					</div>
@@ -178,7 +195,7 @@ $use_wpforms  = ( $wpforms_id > 0 && function_exists( 'shortcode_exists' ) && sh
 						<a class="pmk-btn pmk-btn--wa" href="<?php echo esc_url( $wa_url ); ?>" target="_blank" rel="noopener noreferrer">
 							Chat WhatsApp Sekarang
 						</a>
-						<a class="pmk-btn pmk-btn--outline" href="https://maps.google.com/?q=Panti+Asuhan+Muhammadiyah+Kaligesing+Purworejo" target="_blank" rel="noopener noreferrer">
+						<a class="pmk-btn pmk-btn--outline" href="<?php echo esc_url( $maps_link ); ?>" target="_blank" rel="noopener noreferrer">
 							Buka Google Maps
 						</a>
 					</div>
@@ -187,7 +204,7 @@ $use_wpforms  = ( $wpforms_id > 0 && function_exists( 'shortcode_exists' ) && sh
 				<div id="peta" class="pmk-map-frame">
 					<iframe
 						title="Peta Lokasi Panti Asuhan Muhammadiyah Kaligesing"
-						src="https://maps.google.com/maps?q=Panti%20Asuhan%20Muhammadiyah%20Kaligesing%20Kaliharjo%20Purworejo&t=&z=15&ie=UTF8&iwloc=&output=embed"
+						src="<?php echo esc_url( $maps_embed ); ?>"
 						loading="lazy"
 						referrerpolicy="no-referrer-when-downgrade"
 					></iframe>
@@ -198,4 +215,8 @@ $use_wpforms  = ( $wpforms_id > 0 && function_exists( 'shortcode_exists' ) && sh
 </section>
 
 <?php
+endif; // End ! pmk_should_hide_theme_sections()
+
+pmk_render_builder_content( 'contact' );
+
 get_footer();

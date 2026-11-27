@@ -154,7 +154,9 @@ flowchart LR
 | **Antarmuka &amp; Gaya** | `assets/css/main.css` (`Plus Jakarta Sans` + `Fraunces`) | Palet Muhammadiyah Emerald–Emas, navbar kaca transparan, grid bento, bagan organisasi, dan tata letak adaptif ponsel |
 | **Interaktivitas UI** | `assets/js/main.js` (Vanilla JS) | Menu drawer melayang mobile, preloader halus, rotasi kolase, counter animasi, carousel kegiatan, salin rekening, &amp; lightbox galeri |
 | **Pengolah Kontak** | `inc/contact-handler.php` | Validasi input wajib sisi klien &amp; server, proteksi *nonce*, serta penyimpanan pesan ke tabel kustom &amp; *Custom Post Type* |
-| **Sinkronisasi Terpusat** | `inc/kp-sync.php`, `inc/customizer.php` | Pengaturan 1-klik nomor WhatsApp tunggal, informasi rekening donasi, alamat resmi, serta pembuatan struktur halaman otomatis |
+| **Commercial Customizer** | `inc/customizer.php` | Panel Customizer Komersial (7 seksi, 146 pengaturan: warna dinamis, lebar kontainer, teks, foto dengan fallback anti-error, struktur organisasi, fasilitas, donasi, &amp; WA) |
+| **Elementor &amp; Shortcodes** | `inc/page-builder.php`, `template-elementor-fullwidth.php` | Kompatibilitas penuh *Edit with Elementor* (mode Hybrid / Full Builder), Gutenberg Block Patterns, Widget Area, serta 5 shortcode komponen panti |
+| **Sinkronisasi Terpusat** | `inc/kp-sync.php` | Pengaturan 1-klik nomor WhatsApp tunggal, pembuatan struktur 4 halaman &amp; menu otomatis saat aktivasi tema |
 
 ---
 

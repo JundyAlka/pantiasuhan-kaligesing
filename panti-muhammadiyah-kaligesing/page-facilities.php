@@ -2,114 +2,103 @@
 /**
  * Template Name: Halaman Facilities (Fasilitas)
  * Memuat:
- * - Hero Panorama Landscape Panti
+ * - Hero Panorama Landscape Panti (dapat dikustomisasi di Customizer)
  * - Fasilitas 01–03 dengan palet lembut dan checklist sarana
- * - Galeri Grid 6 Fasilitas Utama Bab II + Dokumentasi Tambahan menggunakan foto asli (tanpa bug tiling)
+ * - Galeri Grid 6 Fasilitas Utama Bab II + Dokumentasi Tambahan menggunakan foto asli (dapat diganti foto & teksnya lewat Customizer)
+ * - Kompatibel penuh dengan Elementor & Gutenberg Block Editor
  *
  * @package Panti_Muhammadiyah_Kaligesing
  */
 
 get_header();
 
-$hero_fac = pmk_get_image_url( '', 'photo-9.png' );
-
-$facilities = array(
-	array(
-		'badge' => 'Fasilitas 01',
-		'title' => 'Depan Panti',
-		'desc'  => 'Tampak depan bangunan utama beserta papan nama resmi Panti Asuhan Muhammadiyah Kaligesing di jalur utama Jl. Raya Purworejo–Kaligesing KM 8,5.',
-		'img'   => pmk_get_image_url( 'pmk_img_fac_depan', 'panti-1.jpg' ),
-	),
-	array(
-		'badge' => 'Fasilitas 02',
-		'title' => 'Ruang Tamu',
-		'desc'  => 'Area penerimaan tamu, wali anak asuh, dan para donatur yang tertata bersih serta nyaman untuk kegiatan silaturahmi dan penyerahan amanah donasi.',
-		'img'   => pmk_get_image_url( 'pmk_img_fac_tamu', 'photo-6.jpg' ),
-	),
-	array(
-		'badge' => 'Fasilitas 03',
-		'title' => 'Ruang Kerja Administrasi',
-		'desc'  => 'Ruang sekretariat dan tata usaha untuk pelayanan administrasi, pencatatan data anak asuh, pengarsipan dokumen resmi, serta pembukuan keuangan panti.',
-		'img'   => pmk_get_image_url( 'pmk_img_fac_administrasi', 'photo-8.jpg' ),
-	),
-	array(
-		'badge' => 'Fasilitas 04',
-		'title' => 'Mushola Panti',
-		'desc'  => 'Pusat kegiatan ibadah shalat lima waktu berjamaah, tadarus dan tahfidz Al-Qur’an, serta pembinaan akhlak Islami seluruh anak asuh setiap hari.',
-		'img'   => pmk_get_image_url( 'pmk_img_fac_mushola', 'photo-5.jpg' ),
-	),
-	array(
-		'badge' => 'Fasilitas 05',
-		'title' => 'Halaman Utama',
-		'desc'  => 'Area terbuka yang hijau, asri, dan aman di lingkungan panti untuk kegiatan olahraga pagi, apel kebersamaan, serta aktivitas luar ruang anak asuh.',
-		'img'   => pmk_get_image_url( 'pmk_img_fac_halaman', 'wa-landscape-2.jpg' ),
-	),
-	array(
-		'badge' => 'Fasilitas 06',
-		'title' => 'Bangunan Asrama / Ruang Belajar',
-		'desc'  => 'Fasilitas hunian kamar anak asuh yang sehat dan terawat, dilengkapi ruang belajar bersama yang tenang untuk mendukung prestasi akademik.',
-		'img'   => pmk_get_image_url( 'pmk_img_fac_asrama', 'panti-4.jpg' ),
-	),
+$hero_fac       = pmk_get_image_url( 'pmk_img_hero_facilities', 'photo-9.png' );
+$fac_hero_title = pmk_get_mod( 'pmk_fac_hero_title', 'Fasilitas & Sarana Panti Asuhan' );
+$fac_hero_desc  = pmk_get_mod(
+	'pmk_fac_hero_desc',
+	'Sarana dan prasarana yang bersih, nyaman, serta representatif untuk menunjang tempat tinggal, ibadah, pembelajaran, dan pelayanan tamu maupun donatur.'
 );
+
+$show_highlights = pmk_get_bool_mod( 'pmk_show_fac_highlights', true );
+$show_main_fac   = pmk_get_bool_mod( 'pmk_show_fac_main', true );
+$show_extra_docs = pmk_get_bool_mod( 'pmk_show_fac_extra', true );
+
+$facilities = pmk_get_facilities_data();
 
 $extra_docs = array(
 	array(
-		'title' => 'Kepala Panti Asuhan Muhammadiyah Kaligesing',
-		'img'   => pmk_get_image_url( '', 'kepala-panti.jpg' ),
+		'title'    => 'Kepala Panti Asuhan Muhammadiyah Kaligesing',
+		'img'      => pmk_get_image_url( 'pmk_img_kepala', 'kepala-panti.jpg' ),
+		'fallback' => pmk_get_fallback_photo_url( 'kepala-panti.jpg' ),
 	),
 	array(
-		'title' => 'Penyerahan Bantuan Bakti Sosial bersama Mitra',
-		'img'   => pmk_get_image_url( '', 'bakti-sosial-kepala.jpg' ),
+		'title'    => 'Penyerahan Bantuan Bakti Sosial bersama Mitra',
+		'img'      => pmk_get_image_url( '', 'bakti-sosial-kepala.jpg' ),
+		'fallback' => pmk_get_fallback_photo_url( 'bakti-sosial-kepala.jpg' ),
 	),
 	array(
-		'title' => 'Kebersamaan Anak Asuh & Pembina di Aula',
-		'img'   => pmk_get_image_url( '', 'anak-kebersamaan-1.jpg' ),
+		'title'    => 'Kebersamaan Anak Asuh & Pembina di Aula',
+		'img'      => pmk_get_image_url( '', 'anak-kebersamaan-1.jpg' ),
+		'fallback' => pmk_get_fallback_photo_url( 'anak-kebersamaan-1.jpg' ),
 	),
 	array(
-		'title' => 'Kegiatan Edukasi & Motivasi di Mushola Panti',
-		'img'   => pmk_get_image_url( '', 'anak-edukasi-mushola.jpg' ),
+		'title'    => 'Kegiatan Edukasi & Motivasi di Mushola Panti',
+		'img'      => pmk_get_image_url( '', 'anak-edukasi-mushola.jpg' ),
+		'fallback' => pmk_get_fallback_photo_url( 'anak-edukasi-mushola.jpg' ),
 	),
 	array(
-		'title' => 'Senyum Ceria Anak Asuh Panti Muhammadiyah',
-		'img'   => pmk_get_image_url( '', 'anak-ceria-landscape.jpg' ),
+		'title'    => 'Senyum Ceria Anak Asuh Panti Muhammadiyah',
+		'img'      => pmk_get_image_url( '', 'anak-ceria-landscape.jpg' ),
+		'fallback' => pmk_get_fallback_photo_url( 'anak-ceria-landscape.jpg' ),
 	),
 	array(
-		'title' => 'Keakraban Santri Putri & Pendamping',
-		'img'   => pmk_get_image_url( '', 'anak-ceria-potret.jpg' ),
+		'title'    => 'Keakraban Santri Putri & Pendamping',
+		'img'      => pmk_get_image_url( '', 'anak-ceria-potret.jpg' ),
+		'fallback' => pmk_get_fallback_photo_url( 'anak-ceria-potret.jpg' ),
 	),
 	array(
-		'title' => 'Sesi Interaktif & Kuis Keislaman Santri',
-		'img'   => pmk_get_image_url( '', 'anak-kuis-mushola.jpg' ),
+		'title'    => 'Sesi Interaktif & Kuis Keislaman Santri',
+		'img'      => pmk_get_image_url( '', 'anak-kuis-mushola.jpg' ),
+		'fallback' => pmk_get_fallback_photo_url( 'anak-kuis-mushola.jpg' ),
 	),
 	array(
-		'title' => 'Keluarga Besar Santri & Kakak Pembina',
-		'img'   => pmk_get_image_url( '', 'anak-kebersamaan-2.jpg' ),
+		'title'    => 'Keluarga Besar Santri & Kakak Pembina',
+		'img'      => pmk_get_image_url( '', 'anak-kebersamaan-2.jpg' ),
+		'fallback' => pmk_get_fallback_photo_url( 'anak-kebersamaan-2.jpg' ),
 	),
 	array(
-		'title' => 'Suasana Pembinaan Karakter di Serambi Mushola',
-		'img'   => pmk_get_image_url( '', 'anak-pembinaan-aula.jpg' ),
+		'title'    => 'Suasana Pembinaan Karakter di Serambi Mushola',
+		'img'      => pmk_get_image_url( '', 'anak-pembinaan-aula.jpg' ),
+		'fallback' => pmk_get_fallback_photo_url( 'anak-pembinaan-aula.jpg' ),
 	),
 	array(
-		'title' => 'Dokumentasi Kegiatan Bersama Santri',
-		'img'   => pmk_get_image_url( '', 'photo-3.jpg' ),
+		'title'    => 'Dokumentasi Kegiatan Bersama Santri',
+		'img'      => pmk_get_image_url( '', 'photo-3.jpg' ),
+		'fallback' => pmk_get_fallback_photo_url( 'photo-3.jpg' ),
 	),
 	array(
-		'title' => 'Kebersamaan Santri & Pengurus Panti',
-		'img'   => pmk_get_image_url( '', 'panti-3.png' ),
+		'title'    => 'Kebersamaan Santri & Pengurus Panti',
+		'img'      => pmk_get_image_url( '', 'panti-3.png' ),
+		'fallback' => pmk_get_fallback_photo_url( 'panti-3.png' ),
 	),
 	array(
-		'title' => 'Bakti Sosial & Kunjungan Mitra',
-		'img'   => pmk_get_image_url( '', 'photo-1.jpg' ),
+		'title'    => 'Bakti Sosial & Kunjungan Mitra',
+		'img'      => pmk_get_image_url( '', 'photo-1.jpg' ),
+		'fallback' => pmk_get_fallback_photo_url( 'photo-1.jpg' ),
 	),
 	array(
-		'title' => 'Aktivitas Kemandirian & Lingkungan Santri',
-		'img'   => pmk_get_image_url( '', 'wa-kegiatan-1.jpg' ),
+		'title'    => 'Aktivitas Kemandirian & Lingkungan Santri',
+		'img'      => pmk_get_image_url( '', 'wa-kegiatan-1.jpg' ),
+		'fallback' => pmk_get_fallback_photo_url( 'wa-kegiatan-1.jpg' ),
 	),
 	array(
-		'title' => 'Latihan Ekstrakurikuler Tapak Suci',
-		'img'   => pmk_get_image_url( '', 'photo-10.png' ),
+		'title'    => 'Latihan Ekstrakurikuler Tapak Suci',
+		'img'      => pmk_get_image_url( '', 'photo-10.png' ),
+		'fallback' => pmk_get_fallback_photo_url( 'photo-10.png' ),
 	),
 );
+
+if ( ! pmk_should_hide_theme_sections() ) :
 ?>
 
 <section class="pmk-page-hero pmk-page-hero--photo" style="background-image: url('<?php echo esc_url( $hero_fac ); ?>');">
@@ -120,13 +109,14 @@ $extra_docs = array(
 			<span aria-hidden="true">/</span>
 			<span>Fasilitas</span>
 		</nav>
-		<h1 class="pmk-page-hero__title">Fasilitas &amp; Sarana Panti Asuhan</h1>
+		<h1 class="pmk-page-hero__title"><?php echo esc_html( $fac_hero_title ); ?></h1>
 		<p class="pmk-page-hero__desc">
-			Sarana dan prasarana yang bersih, nyaman, serta representatif untuk menunjang tempat tinggal, ibadah, pembelajaran, dan pelayanan tamu maupun donatur.
+			<?php echo esc_html( $fac_hero_desc ); ?>
 		</p>
 	</div>
 </section>
 
+<?php if ( $show_highlights ) : ?>
 <!-- FASILITAS UNGGULAN 01–03 -->
 <section class="pmk-section pmk-section--tint">
 	<div class="pmk-container pmk-container--wide">
@@ -172,7 +162,9 @@ $extra_docs = array(
 		</div>
 	</div>
 </section>
+<?php endif; ?>
 
+<?php if ( $show_main_fac ) : ?>
 <!-- GALERI 6 FASILITAS UTAMA BAB II -->
 <section class="pmk-section">
 	<div class="pmk-container pmk-container--wide">
@@ -186,7 +178,7 @@ $extra_docs = array(
 			<?php foreach ( $facilities as $idx => $fac ) : ?>
 				<article class="pmk-gallery-card pmk-reveal" style="--delay: <?php echo esc_attr( $idx * 60 ); ?>ms;">
 					<div class="pmk-gallery-card__img-wrap">
-						<img src="<?php echo esc_url( $fac['img'] ); ?>" alt="<?php echo esc_attr( $fac['title'] ); ?>" loading="lazy">
+						<img src="<?php echo esc_url( $fac['img'] ); ?>" data-fallback-src="<?php echo esc_url( $fac['fallback'] ); ?>" alt="<?php echo esc_attr( $fac['title'] ); ?>" loading="lazy">
 						<span class="pmk-gallery-card__badge"><?php echo esc_html( $fac['badge'] ); ?></span>
 					</div>
 					<div class="pmk-gallery-card__body">
@@ -202,7 +194,9 @@ $extra_docs = array(
 		</div>
 	</div>
 </section>
+<?php endif; ?>
 
+<?php if ( $show_extra_docs ) : ?>
 <!-- DOKUMENTASI GALERI KEGIATAN LAINNYA -->
 <section class="pmk-section pmk-section--tint">
 	<div class="pmk-container pmk-container--wide">
@@ -215,7 +209,7 @@ $extra_docs = array(
 			<?php foreach ( $extra_docs as $idx => $doc ) : ?>
 				<article class="pmk-gallery-card pmk-reveal" style="--delay: <?php echo esc_attr( $idx * 50 ); ?>ms;">
 					<div class="pmk-gallery-card__img-wrap">
-						<img src="<?php echo esc_url( $doc['img'] ); ?>" alt="<?php echo esc_attr( $doc['title'] ); ?>" loading="lazy">
+						<img src="<?php echo esc_url( $doc['img'] ); ?>" data-fallback-src="<?php echo esc_url( $doc['fallback'] ); ?>" alt="<?php echo esc_attr( $doc['title'] ); ?>" loading="lazy">
 					</div>
 					<div class="pmk-gallery-card__body" style="padding:16px 20px;">
 						<h3 class="pmk-gallery-card__title" style="font-size:1rem;"><?php echo esc_html( $doc['title'] ); ?></h3>
@@ -228,11 +222,18 @@ $extra_docs = array(
 		</div>
 	</div>
 </section>
+<?php endif; ?>
+
+<?php
+endif; // End ! pmk_should_hide_theme_sections()
+
+pmk_render_builder_content( 'facilities' );
+?>
 
 <!-- LIGHTBOX MODAL -->
 <div id="pmk-lightbox" class="pmk-lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Pratinjau Foto Fasilitas">
 	<div class="pmk-lightbox__dialog">
-		<img id="pmk-lightbox-img" class="pmk-lightbox__img" src="" alt="">
+		<img id="pmk-lightbox-img" class="pmk-lightbox__img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
 		<div class="pmk-lightbox__bar">
 			<strong id="pmk-lightbox-title" style="color:var(--pmk-text);font-size:1rem;"></strong>
 			<button type="button" id="pmk-lightbox-close" class="pmk-btn pmk-btn--primary" style="min-height:40px;padding:8px 16px;">Tutup</button>
