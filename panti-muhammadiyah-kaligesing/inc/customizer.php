@@ -869,14 +869,14 @@ function pmk_customize_register( $wp_customize ) {
 		'pmk_builder_mode',
 		array(
 			'label'       => __( 'Mode Integrasi Elementor & Block Editor', 'panti-muhammadiyah-kaligesing' ),
-			'description' => __( 'Pilih bagaimana halaman utama bekerja saat diedit menggunakan Elementor atau Gutenberg.', 'panti-muhammadiyah-kaligesing' ),
+			'description' => __( 'Pilih bagaimana halaman utama bekerja saat diedit menggunakan Elementor atau Gutenberg. Default "Desain Bawaan Tema" mencegah sisa konten/template lama muncul di bagian bawah halaman.', 'panti-muhammadiyah-kaligesing' ),
 			'section'     => 'pmk_sec_colors',
 			'type'        => 'select',
-			'default'     => 'hybrid',
+			'default'     => 'theme_only',
 			'choices'     => array(
+				'theme_only'   => __( 'Desain Bawaan Tema Bersih (Cegah Sisa Template Lama Muncul di Bawah)', 'panti-muhammadiyah-kaligesing' ),
 				'hybrid'       => __( 'Hybrid (Tampilkan Desain Tema + Blok Tambahan Elementor/Gutenberg)', 'panti-muhammadiyah-kaligesing' ),
 				'builder_only' => __( 'Full Page Builder (Ganti Isi Halaman dengan Konten Elementor bila Diedit)', 'panti-muhammadiyah-kaligesing' ),
-				'theme_only'   => __( 'Desain Bawaan Tema (Hanya Aktifkan Dropzone Saat Mode Edit Elementor)', 'panti-muhammadiyah-kaligesing' ),
 			),
 		)
 	);

@@ -310,7 +310,7 @@ if ( ! pmk_should_hide_theme_sections() ) :
 					<svg class="pmk-icon-pulse" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
 					<span><?php echo esc_html( $hero_btn_primary ); ?></span>
 				</a>
-				<a class="pmk-btn pmk-btn--ghost-light" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">
+				<a class="pmk-btn pmk-btn--ghost-light" href="<?php echo esc_url( pmk_get_page_url( 'about' ) ); ?>">
 					<span><?php echo esc_html( $hero_btn_secondary ); ?></span>
 				</a>
 			</div>
@@ -381,7 +381,7 @@ if ( ! pmk_should_hide_theme_sections() ) :
 					<h2 class="pmk-bento__title">Desa Kaliharjo, Kaligesing</h2>
 					<p class="pmk-bento__text"><?php echo esc_html( pmk_get_address() ); ?></p>
 				</div>
-				<a class="pmk-btn pmk-btn--outline" href="<?php echo esc_url( home_url( '/contact/#peta' ) ); ?>">
+				<a class="pmk-btn pmk-btn--outline" href="<?php echo esc_url( pmk_get_page_url( 'contact', '#peta' ) ); ?>">
 					Lihat Peta Lokasi
 				</a>
 			</article>
@@ -395,7 +395,7 @@ if ( ! pmk_should_hide_theme_sections() ) :
 					<h2 class="pmk-bento__title">Naungan PCM Kaligesing</h2>
 					<p class="pmk-bento__text">Berada di bawah naungan Pimpinan Cabang Muhammadiyah Kaligesing dan bergerak aktif dalam pelayanan sosial serta pengasuhan anak yatim secara amanah.</p>
 				</div>
-				<a class="pmk-btn pmk-btn--outline" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">
+				<a class="pmk-btn pmk-btn--outline" href="<?php echo esc_url( pmk_get_page_url( 'about' ) ); ?>">
 					Pelajari Profil Lengkap
 				</a>
 			</article>
@@ -713,7 +713,7 @@ if ( ! pmk_should_hide_theme_sections() ) :
 		</div>
 
 		<div style="margin-top:32px;text-align:center;">
-			<a class="pmk-btn pmk-btn--primary pmk-btn--sheen" href="<?php echo esc_url( home_url( '/facilities/' ) ); ?>">
+			<a class="pmk-btn pmk-btn--primary pmk-btn--sheen" href="<?php echo esc_url( pmk_get_page_url( 'facilities' ) ); ?>">
 				<span>Lihat Seluruh Fasilitas &amp; Galeri Panti</span>
 			</a>
 		</div>
@@ -737,7 +737,7 @@ if ( ! pmk_should_hide_theme_sections() ) :
 					<a class="pmk-btn pmk-btn--gold pmk-btn--sheen pmk-btn--glow" href="<?php echo esc_url( $wa_url ); ?>" target="_blank" rel="noopener noreferrer">
 						Konfirmasi Donasi via WhatsApp
 					</a>
-					<a class="pmk-btn pmk-btn--ghost-light" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">
+					<a class="pmk-btn pmk-btn--ghost-light" href="<?php echo esc_url( pmk_get_page_url( 'contact' ) ); ?>">
 						Buka Halaman Kontak
 					</a>
 				</div>

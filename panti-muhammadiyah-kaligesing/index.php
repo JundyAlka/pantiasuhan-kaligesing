@@ -1,9 +1,24 @@
 <?php
 /**
- * Main Index Fallback Template
+ * Main Index Fallback Template + Auto-Router 4 Halaman Inti
  *
  * @package Panti_Muhammadiyah_Kaligesing
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+if ( function_exists( 'pmk_resolve_core_template_type' ) && function_exists( 'pmk_get_core_template_file' ) ) {
+	$core_type = pmk_resolve_core_template_type();
+	if ( '' !== $core_type ) {
+		$core_file = pmk_get_core_template_file( $core_type );
+		if ( '' !== $core_file && file_exists( $core_file ) ) {
+			include $core_file;
+			return;
+		}
+	}
+}
 
 get_header();
 ?>

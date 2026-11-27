@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PMK_THEME_VERSION', '2.3.0' );
+define( 'PMK_THEME_VERSION', '2.4.0' );
 
 require_once get_template_directory() . '/inc/customizer.php';
 require_once get_template_directory() . '/inc/contact-handler.php';
@@ -110,43 +110,92 @@ if ( function_exists( 'add_action' ) ) {
 }
 
 /**
- * Daftar 4 menu wajib KP dalam Bahasa Indonesia dengan slug URL konsisten (/ , /about/ , /facilities/ , /contact/).
+ * Ambil URL halaman inti ('', 'about', 'facilities', 'contact') secara cerdas
+ * dengan menyesuaikan struktur permalink server (.htaccess / PATHINFO / page_id) agar tidak pernah 404.
+ *
+ * @param string $slug Slug halaman ('', 'about', 'facilities', 'contact').
+ * @param string $hash Anchor opsional (mis. '#donasi' atau '#peta').
+ * @return string
+ */
+function pmk_get_page_url( $slug = '', $hash = '' ) {
+	$clean_slug = trim( (string) $slug, '/' );
+	if ( '' === $clean_slug || 'home' === $clean_slug ) {
+		return home_url( '/' ) . $hash;
+	}
+
+	if ( defined( 'PMK_LOCAL_PREVIEW' ) && PMK_LOCAL_PREVIEW ) {
+		return home_url( '/' . $clean_slug . '/' ) . $hash;
+	}
+
+	$alt_map = array(
+		'about'      => array( 'about', 'tentang-kami', 'profil' ),
+		'facilities' => array( 'facilities', 'fasilitas', 'galeri' ),
+		'contact'    => array( 'contact', 'kontak', 'hubungi-kami' ),
+	);
+
+	$candidates = $alt_map[ $clean_slug ] ?? array( $clean_slug );
+	if ( function_exists( 'get_page_by_path' ) && function_exists( 'get_permalink' ) ) {
+		foreach ( $candidates as $cand ) {
+			$page_obj = get_page_by_path( $cand );
+			if ( is_object( $page_obj ) && ! empty( $page_obj->ID ) ) {
+				$perm = get_permalink( $page_obj->ID );
+				if ( ! empty( $perm ) && is_string( $perm ) ) {
+					return $perm . $hash;
+				}
+			}
+		}
+	}
+
+	if ( function_exists( 'get_option' ) ) {
+		$perm_struct = (string) get_option( 'permalink_structure', '' );
+		if ( 0 === strpos( $perm_struct, '/index.php' ) ) {
+			return home_url( '/index.php/' . $clean_slug . '/' ) . $hash;
+		}
+	}
+
+	return home_url( '/' . $clean_slug . '/' ) . $hash;
+}
+
+/**
+ * Daftar 4 menu wajib KP dalam Bahasa Indonesia dengan resolusi URL anti-404.
  */
 function pmk_get_nav_items() {
+	$active_type = function_exists( 'pmk_resolve_core_template_type' ) ? pmk_resolve_core_template_type() : '';
 	$current_uri = isset( $_SERVER['REQUEST_URI'] ) ? trim( (string) strtok( $_SERVER['REQUEST_URI'], '?' ), '/' ) : '';
-	$items       = array(
+
+	$items = array(
 		array(
 			'label' => 'Beranda',
 			'slug'  => '',
-			'url'   => home_url( '/' ),
+			'type'  => 'home',
+			'url'   => pmk_get_page_url( '' ),
 		),
 		array(
 			'label' => 'Tentang Kami',
 			'slug'  => 'about',
-			'url'   => home_url( '/about/' ),
+			'type'  => 'about',
+			'url'   => pmk_get_page_url( 'about' ),
 		),
 		array(
 			'label' => 'Fasilitas',
 			'slug'  => 'facilities',
-			'url'   => home_url( '/facilities/' ),
+			'type'  => 'facilities',
+			'url'   => pmk_get_page_url( 'facilities' ),
 		),
 		array(
 			'label' => 'Kontak',
 			'slug'  => 'contact',
-			'url'   => home_url( '/contact/' ),
+			'type'  => 'contact',
+			'url'   => pmk_get_page_url( 'contact' ),
 		),
 	);
 
 	foreach ( $items as &$item ) {
-		$active = false;
-		if ( function_exists( 'is_front_page' ) && '' === $item['slug'] ) {
-			$active = is_front_page();
-		} elseif ( function_exists( 'is_page' ) && '' !== $item['slug'] ) {
-			$active = is_page( $item['slug'] );
+		if ( '' !== $active_type ) {
+			$item['active'] = ( $active_type === $item['type'] );
 		} else {
-			$active = ( $current_uri === $item['slug'] );
+			$item['active'] = ( $current_uri === $item['slug'] );
 		}
-		$item['active'] = $active;
 	}
 	unset( $item );
 

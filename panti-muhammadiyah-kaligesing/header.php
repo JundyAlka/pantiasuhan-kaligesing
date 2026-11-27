@@ -64,23 +64,7 @@ if ( function_exists( 'wp_body_open' ) ) {
 		</a>
 
 		<nav class="pmk-nav" aria-label="Navigasi Utama">
-			<?php
-			if ( function_exists( 'has_nav_menu' ) && has_nav_menu( 'primary' ) && ! defined( 'PMK_LOCAL_PREVIEW' ) ) {
-				wp_nav_menu(
-					array(
-						'theme_location' => 'primary',
-						'container'      => false,
-						'menu_class'     => 'pmk-nav__list',
-						'depth'          => 1,
-						'fallback_cb'    => function () {
-							pmk_render_fallback_nav( 'pmk-nav__list' );
-						},
-					)
-				);
-			} else {
-				pmk_render_fallback_nav( 'pmk-nav__list' );
-			}
-			?>
+			<?php pmk_render_fallback_nav( 'pmk-nav__list' ); ?>
 		</nav>
 
 		<div class="pmk-header__actions">
@@ -113,7 +97,7 @@ if ( function_exists( 'wp_body_open' ) ) {
 					<small><?php echo esc_html( pmk_get_wa_display() ); ?></small>
 				</span>
 			</a>
-			<a class="pmk-btn pmk-btn--outline pmk-mobile-drawer__donate" href="<?php echo esc_url( home_url( '/contact/#donasi' ) ); ?>">
+			<a class="pmk-btn pmk-btn--outline pmk-mobile-drawer__donate" href="<?php echo esc_url( pmk_get_page_url( 'contact', '#donasi' ) ); ?>">
 				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FACC15" stroke-width="2.2" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
 				<span>Info Rekening Donasi</span>
 			</a>

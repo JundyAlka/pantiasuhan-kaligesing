@@ -213,13 +213,31 @@ with urllib.request.urlopen(BASE_URL + "/facilities/?" + stress_fac_query, timeo
     assert "photo-6.jpg" in sf_html
 print("[PASS] 7. Multi-scenario Customizer dynamic edits & defensive photo fallback stress-tested across pages with 0 errors.")
 
-# 8. Verify Elementor Editor/Preview Mode, Full-Width Template & All 5 Theme Shortcodes
+# 8. Verify Elementor Editor/Preview Mode, Full-Width Template, Legacy Content Blocker, Indonesian Slug Auto-Routing & All 5 Theme Shortcodes
 for route in ["/", "/about/", "/facilities/", "/contact/"]:
     with urllib.request.urlopen(BASE_URL + route + "?elementor-preview=1", timeout=5) as resp:
         el_html = resp.read().decode("utf-8")
         assert_no_php_errors(el_html, f"Elementor Preview on {route}")
         assert "pmk-builder-region" in el_html, f"Missing Elementor dropzone region on {route}"
         assert "elementor-section-wrap" in el_html, f"the_content() not rendered in Elementor preview on {route}"
+
+# Verify that even if DB post_content has old template leftovers AND page.php is loaded on /beranda, /tentang-kami, /fasilitas, /kontak,
+# it routes to the proper theme template and NEVER prints the old leftover template content at the bottom!
+legacy_payload = urllib.parse.urlencode({
+    "_page_content": "Selamat Datang!! Jalan Raya, Sawah,Ladang, Kaliharjo Mewujudkan Pengasuhan Islami demi Masa Depan 23+ 14+ 17+ 4+"
+})
+for id_route, expected_marker in [
+    ("/beranda/", 'id="pmk-orbit-stage"'),
+    ("/tentang-kami/", "pmk-org-chart"),
+    ("/fasilitas/", "pmk-gallery-grid"),
+    ("/kontak/", 'id="pmk-contact-form"'),
+]:
+    with urllib.request.urlopen(BASE_URL + id_route + "?" + legacy_payload, timeout=5) as resp:
+        id_html = resp.read().decode("utf-8")
+        assert_no_php_errors(id_html, f"Legacy route & content blocker test on {id_route}")
+        assert expected_marker in id_html, f"Route {id_route} via page.php did not auto-route to expected template ({expected_marker})!"
+        assert "Jalan Raya, Sawah,Ladang" not in id_html, f"Legacy leftover content leaked onto {id_route}!"
+        assert "Selamat Datang!!" not in id_html, f"Legacy leftover content leaked onto {id_route}!"
 
 shortcode_test_query = urllib.parse.urlencode({
     "_page_content": "[pmk_rekening_donasi] [pmk_struktur_organisasi] [pmk_galeri_fasilitas] [pmk_info_kontak] [pmk_form_kontak]"
@@ -232,7 +250,7 @@ with urllib.request.urlopen(BASE_URL + "/elementor-page?" + shortcode_test_query
     assert "pmk-org-chart" in sc_html
     assert "pmk-gallery-grid" in sc_html
     assert "pmk-shortcode-form-wrap" in sc_html
-print("[PASS] 8. Elementor Preview dropzones, Elementor Full-Width template, and all 5 modular shortcodes verified.")
+print("[PASS] 8. Legacy template override blocker, Indonesian slug auto-router (/beranda, /tentang-kami, /fasilitas, /kontak), Elementor Preview, and all 5 shortcodes verified.")
 
 # 9. Verify ZIP archive
 assert os.path.isfile(ZIP_PATH)

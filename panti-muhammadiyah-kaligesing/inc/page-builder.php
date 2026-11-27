@@ -1,18 +1,22 @@
 <?php
 /**
- * Integrasi Elementor, Gutenberg Block Editor, Shortcodes & Widget Areas
+ * Integrasi Elementor, Gutenberg Block Editor, Shortcodes, Template Enforcer & Widget Areas
  *
  * Memastikan:
- * 1. "Edit with Elementor" berfungsi di seluruh halaman (Beranda, Tentang Kami, Fasilitas, Kontak, Halaman Baru)
- *    tanpa pernah memunculkan error "The content area was not found in your page".
- * 2. Mendukung 3 mode fleksibel di Customizer (Hybrid, Builder Only, Theme Only).
- * 3. Menyediakan 5 Shortcode Komponen Resmi Panti yang dapat dipasang di Elementor / Gutenberg:
+ * 1. Halaman utama (Beranda, Tentang Kami, Fasilitas, Kontak — baik slug Inggris maupun Indonesia)
+ *    SELALU merender desain tema baru yang bersih dan TIDAK PERNAH tertimpa oleh konten halaman lama
+ *    dari database / Elementor lama.
+ * 2. Filter `template_include` prioritas 99999 + penyelamat rute 404 (`template_redirect`) memastikan
+ *    sub-halaman `/about/`, `/tentang-kami/`, `/facilities/`, `/fasilitas/`, `/contact/`, `/kontak/`
+ *    selalu tampil HTTP 200 dengan template yang tepat.
+ * 3. "Edit with Elementor" tetap berfungsi tanpa error "The content area was not found in your page"
+ *    kapan pun pengguna membuka editor Elementor.
+ * 4. Menyediakan 5 Shortcode Komponen Resmi Panti yang dapat dipasang di Elementor / Gutenberg:
  *    - [pmk_rekening_donasi]
  *    - [pmk_form_kontak]
  *    - [pmk_struktur_organisasi]
  *    - [pmk_galeri_fasilitas]
  *    - [pmk_info_kontak]
- * 4. Mendaftarkan Sidebar / Widget Area WordPress & Block Pattern Gutenberg.
  *
  * @package Panti_Muhammadiyah_Kaligesing
  */
@@ -22,7 +26,163 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Daftar teks placeholder bawaan sinkronisasi KP (agar tidak tercetak ganda di mode hybrid).
+ * Deteksi apakah halaman saat ini adalah salah satu dari 4 halaman inti panti
+ * berdasarkan URL path, slug halaman, judul halaman, atau status front page.
+ *
+ * @return string '' | 'home' | 'about' | 'facilities' | 'contact'
+ */
+function pmk_resolve_core_template_type() {
+	// 1. Jika pengguna secara eksplisit memilih template khusus Elementor Full Width pada halaman baru
+	if ( function_exists( 'get_page_template_slug' ) ) {
+		$tpl_slug = get_page_template_slug();
+		if ( 'template-elementor-fullwidth.php' === $tpl_slug ) {
+			return '';
+		}
+	}
+
+	// 2. Cek berdasarkan path URL yang diminta
+	$req_uri  = isset( $_SERVER['REQUEST_URI'] ) ? (string) parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) : '/';
+	$home_uri = function_exists( 'home_url' ) ? (string) parse_url( home_url( '/' ), PHP_URL_PATH ) : '/';
+	if ( '' !== $home_uri && '/' !== $home_uri && 0 === strpos( $req_uri, $home_uri ) ) {
+		$req_uri = substr( $req_uri, strlen( $home_uri ) );
+	}
+	$req_uri = preg_replace( '#^/?index\.php/?#i', '', $req_uri );
+	$slug    = strtolower( trim( (string) $req_uri, '/' ) );
+
+	// Ambil segmen terakhir bila berada di sub-path
+	if ( false !== strpos( $slug, '/' ) ) {
+		$segments = explode( '/', $slug );
+		$slug     = (string) end( $segments );
+	}
+
+	$about_slugs      = array( 'about', 'tentang-kami', 'tentang', 'profil', 'profil-panti', 'about-us' );
+	$facilities_slugs = array( 'facilities', 'fasilitas', 'sarana', 'galeri', 'fasilitas-panti' );
+	$contact_slugs    = array( 'contact', 'kontak', 'hubungi-kami', 'kontak-kami', 'contact-us' );
+	$home_slugs       = array( 'home', 'beranda', 'halaman-utama' );
+
+	if ( in_array( $slug, $about_slugs, true ) ) {
+		return 'about';
+	}
+	if ( in_array( $slug, $facilities_slugs, true ) ) {
+		return 'facilities';
+	}
+	if ( in_array( $slug, $contact_slugs, true ) ) {
+		return 'contact';
+	}
+	if ( in_array( $slug, $home_slugs, true ) ) {
+		return 'home';
+	}
+
+	// 3. Cek berdasarkan objek Post/Page yang sedang di-query oleh WordPress
+	if ( function_exists( 'get_queried_object' ) ) {
+		$obj = get_queried_object();
+		if ( is_object( $obj ) && isset( $obj->post_type ) && 'page' === $obj->post_type ) {
+			$post_slug  = strtolower( trim( (string) ( $obj->post_name ?? '' ) ) );
+			$post_title = strtolower( trim( (string) ( $obj->post_title ?? '' ) ) );
+			$post_slug  = preg_replace( '/-\d+$/', '', $post_slug );
+
+			if ( in_array( $post_slug, $about_slugs, true ) || in_array( $post_title, array( 'tentang kami', 'about', 'profil', 'profil panti' ), true ) ) {
+				return 'about';
+			}
+			if ( in_array( $post_slug, $facilities_slugs, true ) || in_array( $post_title, array( 'fasilitas', 'facilities', 'galeri' ), true ) ) {
+				return 'facilities';
+			}
+			if ( in_array( $post_slug, $contact_slugs, true ) || in_array( $post_title, array( 'kontak', 'contact', 'hubungi kami' ), true ) ) {
+				return 'contact';
+			}
+			if ( in_array( $post_slug, $home_slugs, true ) || in_array( $post_title, array( 'beranda', 'home' ), true ) ) {
+				return 'home';
+			}
+		}
+	}
+
+	// 4. Cek apakah halaman depan (front page / root URL)
+	if ( '' === $slug && ! isset( $_GET['p'] ) && ! isset( $_GET['page_id'] ) && ! isset( $_GET['s'] ) ) {
+		return 'home';
+	}
+	if ( function_exists( 'is_front_page' ) && is_front_page() ) {
+		return 'home';
+	}
+
+	return '';
+}
+
+/**
+ * Map tipe halaman inti ke nama file template tema.
+ *
+ * @param string $type Tipe halaman ('home', 'about', 'facilities', 'contact').
+ * @return string Path absolut file template atau string kosong.
+ */
+function pmk_get_core_template_file( $type ) {
+	$map = array(
+		'home'       => '/front-page.php',
+		'about'      => '/page-about.php',
+		'facilities' => '/page-facilities.php',
+		'contact'    => '/page-contact.php',
+	);
+	if ( isset( $map[ $type ] ) ) {
+		$file = get_template_directory() . $map[ $type ];
+		if ( file_exists( $file ) ) {
+			return $file;
+		}
+	}
+	return '';
+}
+
+/**
+ * Paksa WordPress & Elementor memakai file template resmi tema (prioritas 99999)
+ * untuk ke-4 halaman inti agar tidak pernah jatuh ke page.php yang menampilkan konten lama.
+ *
+ * @param string $template Path template yang dipilih WordPress/plugin.
+ * @return string
+ */
+function pmk_enforce_core_page_templates( $template ) {
+	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+		return $template;
+	}
+	$core_type = pmk_resolve_core_template_type();
+	if ( '' !== $core_type ) {
+		$forced = pmk_get_core_template_file( $core_type );
+		if ( '' !== $forced ) {
+			return $forced;
+		}
+	}
+	return $template;
+}
+if ( function_exists( 'add_filter' ) ) {
+	add_filter( 'template_include', 'pmk_enforce_core_page_templates', 99999 );
+}
+
+/**
+ * Penyelamat Rute 404: Jika pengunjung membuka /about/, /tentang-kami/, /facilities/, /fasilitas/, /contact/, atau /kontak/
+ * tetapi halaman di database belum sinkron slug-nya, ubah status 404 menjadi 200 OK agar halaman tetap tampil sempurna.
+ */
+function pmk_rescue_core_routes_from_404() {
+	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+		return;
+	}
+	$core_type = pmk_resolve_core_template_type();
+	if ( '' === $core_type ) {
+		return;
+	}
+	global $wp_query;
+	if ( isset( $wp_query ) && is_object( $wp_query ) && ! empty( $wp_query->is_404 ) ) {
+		$wp_query->is_404  = false;
+		$wp_query->is_page = true;
+		if ( 'home' === $core_type ) {
+			$wp_query->is_front_page = true;
+		}
+		if ( function_exists( 'status_header' ) ) {
+			status_header( 200 );
+		}
+	}
+}
+if ( function_exists( 'add_action' ) ) {
+	add_action( 'template_redirect', 'pmk_rescue_core_routes_from_404', 1 );
+}
+
+/**
+ * Daftar teks placeholder bawaan sinkronisasi KP (agar tidak tercetak ganda).
  *
  * @return array<int, string>
  */
@@ -33,6 +193,33 @@ function pmk_get_default_seed_contents() {
 		'Fasilitas dan Galeri Sarana Panti Asuhan Muhammadiyah Kaligesing.',
 		'Formulir Kontak, Rekening Donasi, Alamat Lengkap, WhatsApp, dan Peta Lokasi.',
 	);
+}
+
+/**
+ * Deteksi apakah isi post_content merupakan sisa template/website lama yang tidak boleh ditampilkan
+ * menimpa bagian bawah tema baru.
+ *
+ * @param string $content Isi post_content dari database.
+ * @return bool
+ */
+function pmk_is_legacy_leftover_content( $content ) {
+	$markers = array(
+		'Jalan Raya, Sawah',
+		'Selamat Datang!!',
+		'Mewujudkan Pengasuhan Islami demi Masa Depan',
+		'23+',
+		'14+',
+		'17+',
+		'4+',
+		'Assisted Living',
+		'Elderly Home',
+	);
+	foreach ( $markers as $marker ) {
+		if ( false !== stripos( $content, $marker ) ) {
+			return true;
+		}
+	}
+	return false;
 }
 
 /**
@@ -69,7 +256,7 @@ function pmk_is_elementor_built_page( $post_id = 0 ) {
 }
 
 /**
- * Cek apakah halaman memiliki konten kustom di luar teks seed bawaan KP.
+ * Cek apakah halaman memiliki konten kustom baru di luar teks seed bawaan KP dan BUKAN sisa template lama.
  *
  * @return bool
  */
@@ -81,21 +268,24 @@ function pmk_has_custom_page_content() {
 	if ( ! is_object( $post ) || empty( $post->post_content ) ) {
 		return false;
 	}
-	$raw_content = trim( wp_strip_all_tags( (string) $post->post_content ) );
+	$full_raw = (string) $post->post_content;
+	if ( pmk_is_legacy_leftover_content( $full_raw ) ) {
+		return false;
+	}
+	$raw_content = trim( wp_strip_all_tags( $full_raw ) );
 	if ( '' === $raw_content ) {
-		// Mungkin berisi blok HTML/shortcode non-teks
-		return ( '' !== trim( (string) $post->post_content ) );
+		return ( '' !== trim( $full_raw ) );
 	}
 	return ! in_array( $raw_content, pmk_get_default_seed_contents(), true );
 }
 
 /**
- * Cek apakah seksi bawaan tema harus disembunyikan (ketika mode = builder_only dan halaman berisi konten Elementor/Gutenberg).
+ * Cek apakah seksi bawaan tema harus disembunyikan (hanya ketika admin secara eksplisit memilih mode = builder_only di Customizer).
  *
  * @return bool
  */
 function pmk_should_hide_theme_sections() {
-	$mode = pmk_get_mod( 'pmk_builder_mode', 'hybrid' );
+	$mode = pmk_get_mod( 'pmk_builder_mode', 'theme_only' );
 	if ( 'builder_only' !== $mode ) {
 		return false;
 	}
@@ -103,23 +293,27 @@ function pmk_should_hide_theme_sections() {
 }
 
 /**
- * Render area konten WordPress (`the_content()`) secara cerdas agar Elementor & Gutenberg
- * selalu kompatibel 100% di seluruh template halaman.
+ * Render area konten WordPress (`the_content()`) secara cerdas:
+ * - Default mode adalah `theme_only`: Halaman publik HANYA menampilkan desain tema baru yang bersih
+ *   (tidak pernah menempelkan sisa konten/template lama di bagian bawah halaman!).
+ * - Saat pengguna membuka mode editor Elementor (`?elementor-preview=...`), dropzone `the_content()`
+ *   otomatis diaktifkan agar Elementor tidak pernah error "The content area was not found".
+ * - Jika pengguna memilih mode `hybrid` atau `builder_only` di Appearance -> Customize, konten baru
+ *   yang bukan sisa template lama akan ditampilkan.
  *
  * @param string $context Nama konteks template (home, about, facilities, contact).
  */
 function pmk_render_builder_content( $context = 'page' ) {
-	$is_preview  = pmk_is_elementor_editor_or_preview();
-	$is_builder  = pmk_is_elementor_built_page();
-	$has_custom  = pmk_has_custom_page_content();
-	$mode        = pmk_get_mod( 'pmk_builder_mode', 'hybrid' );
+	$is_preview = pmk_is_elementor_editor_or_preview();
+	$mode       = pmk_get_mod( 'pmk_builder_mode', 'theme_only' );
 
-	// Selalu panggil the_content() saat di Elementor Preview/Editor agar Elementor tidak pernah error
+	// Pada tampilan publik dengan mode default 'theme_only', jangan pernah cetak the_content() lama di bawah halaman!
 	if ( ! $is_preview && 'theme_only' === $mode ) {
 		return;
 	}
 
-	if ( ! $is_preview && ! $is_builder && ! $has_custom ) {
+	$has_custom = pmk_has_custom_page_content();
+	if ( ! $is_preview && ! $has_custom ) {
 		return;
 	}
 

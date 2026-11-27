@@ -44,23 +44,7 @@ $enable_float_wa  = pmk_get_bool_mod( 'pmk_enable_float_wa', true );
 
 			<div>
 				<h2 class="pmk-footer__title">Navigasi Halaman</h2>
-				<?php
-				if ( function_exists( 'has_nav_menu' ) && has_nav_menu( 'footer' ) && ! defined( 'PMK_LOCAL_PREVIEW' ) ) {
-					wp_nav_menu(
-						array(
-							'theme_location' => 'footer',
-							'container'      => false,
-							'menu_class'     => 'pmk-footer__menu',
-							'depth'          => 1,
-							'fallback_cb'    => function () {
-								pmk_render_fallback_nav( 'pmk-footer__menu' );
-							},
-						)
-					);
-				} else {
-					pmk_render_fallback_nav( 'pmk-footer__menu' );
-				}
-				?>
+				<?php pmk_render_fallback_nav( 'pmk-footer__menu' ); ?>
 			</div>
 
 			<div>

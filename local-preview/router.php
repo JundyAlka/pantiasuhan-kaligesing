@@ -145,6 +145,8 @@ function __( $text, $domain = '' ) {
 	return $text;
 }
 
+function add_action( $tag, $cb, $prio = 10, $args = 1 ) {}
+function add_filter( $tag, $cb, $prio = 10, $args = 1 ) {}
 function add_theme_support( $feature, $args = array() ) {}
 function register_nav_menus( $locations = array() ) {}
 function register_sidebar( $args = array() ) {}
@@ -348,9 +350,13 @@ if ( '/admin-messages' === $clean_path ) {
 $routes = array(
 	'/'               => 'front-page.php',
 	'/home'           => 'front-page.php',
+	'/beranda'        => 'page.php',
 	'/about'          => 'page-about.php',
+	'/tentang-kami'   => 'page.php',
 	'/facilities'     => 'page-facilities.php',
+	'/fasilitas'      => 'page.php',
 	'/contact'        => 'page-contact.php',
+	'/kontak'         => 'page.php',
 	'/elementor-page' => 'template-elementor-fullwidth.php',
 );
 
